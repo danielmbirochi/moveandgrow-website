@@ -1,0 +1,67 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section from '../components/Section.astro';
+import Label from '../components/Label.astro';
+import Door from '../components/Door.astro';
+import Card from '../components/Card.astro';
+import Commitments from '../components/Commitments.astro';
+import OfferTable from '../components/OfferTable.astro';
+import Button from '../components/Button.astro';
+import home from '../content/home';
+import shell from '../content/shell';
+import { organization, services } from '../lib/structured-data';
+
+const jsonLd = [organization(home.seo.description), ...services('all', '/')];
+---
+<BaseLayout seo={home.seo} jsonLd={jsonLd}>
+  <section class="mg-hero bg-ground pt-16 pb-16 md:pt-28 md:pb-24" aria-labelledby="hero-title">
+    <div class="mg-container">
+      <Label as="p">{home.hero.label}</Label>
+      <h1 id="hero-title" class="mt-6 max-w-[16ch]">{home.hero.headline}</h1>
+      <p class="mg-lead mt-8 max-w-[40rem]">{home.hero.lead}</p>
+      <div class="mt-12 grid max-w-[44rem] gap-4 sm:grid-cols-2">
+        {home.hero.doors.map((d) => <Door href={d.href}>{d.label}</Door>)}
+      </div>
+    </div>
+  </section>
+
+  <Section label={home.commitments.label} heading={home.commitments.heading} class="border-t border-border">
+    <Commitments />
+  </Section>
+
+  <Section tone="surface" label={home.audiences.label} heading={home.audiences.heading}>
+    <div class="grid gap-6 md:grid-cols-2">
+      {
+        home.audiences.cards.map((c) => (
+          <Card as="article" class="flex flex-col">
+            <Label as="h3">{c.label}</Label>
+            <p class="mg-heading mt-5 mb-10 text-[1.625rem] md:text-[2rem]">{c.text}</p>
+            <a href={c.href} class="mg-link mt-auto self-start">
+              {c.link}
+            </a>
+          </Card>
+        ))
+      }
+    </div>
+  </Section>
+
+  <Section label={home.offers.label} heading={home.offers.heading}>
+    <OfferTable audience="all" />
+  </Section>
+
+  <section class="mg-inverse py-16 md:py-28" aria-labelledby="mapa-teaser">
+    <div class="mg-container grid gap-10 md:grid-cols-12 md:gap-12">
+      <div class="md:col-span-5">
+        <Label as="p">{home.mapa.label}</Label>
+        <h2 id="mapa-teaser" class="mt-4">{home.mapa.heading}</h2>
+      </div>
+      <div class="md:col-span-7">
+        <p class="mg-heading text-[1.375rem] leading-snug md:text-[1.75rem]">{home.mapa.text}</p>
+        <div class="mt-10 flex flex-wrap items-center gap-x-8 gap-y-5">
+          <Button href="/contato/" arrow>{shell.cta}</Button>
+          <a href="/mapa-da-operacao/" class="mg-link">{home.mapa.more}</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

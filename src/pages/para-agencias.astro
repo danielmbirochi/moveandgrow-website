@@ -1,0 +1,52 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section from '../components/Section.astro';
+import Label from '../components/Label.astro';
+import NumberedItem from '../components/NumberedItem.astro';
+import OfferTable from '../components/OfferTable.astro';
+import CtaBand from '../components/CtaBand.astro';
+import Button from '../components/Button.astro';
+import page from '../content/agencias';
+import shell from '../content/shell';
+import { services } from '../lib/structured-data';
+
+const path = '/para-agencias/';
+---
+<BaseLayout
+  seo={page.seo}
+  breadcrumb={[{ name: page.breadcrumb, path }]}
+  jsonLd={services('agencies', path)}
+>
+  <section class="bg-ground pt-16 pb-16 md:pt-28 md:pb-24" aria-labelledby="hero-title">
+    <div class="mg-container">
+      <Label as="p">{page.hero.label}</Label>
+      <h1 id="hero-title" class="mt-6 max-w-[18ch]">{page.hero.headline}</h1>
+      <p class="mg-lead mt-8 max-w-[42rem]">{page.hero.lead}</p>
+      <div class="mt-10">
+        <Button href="/contato/" arrow>{shell.cta}</Button>
+      </div>
+    </div>
+  </section>
+
+  <Section tone="surface" label={page.ways.label} heading={page.ways.heading}>
+    <ol class="grid gap-x-10 gap-y-12 md:grid-cols-2">
+      {page.ways.items.map((w, i) => <NumberedItem as="li" n={i + 1} title={w.title} text={w.text} />)}
+    </ol>
+  </Section>
+
+  <Section label={page.offers.label} heading={page.offers.heading}>
+    <OfferTable audience="agencies" />
+  </Section>
+
+  <section class="mg-inverse py-16 md:py-28" aria-labelledby="statement">
+    <div class="mg-container">
+      <span class="mg-statement__bar block h-1.5 w-12 bg-accent" aria-hidden="true"></span>
+      <Label as="p" class="mt-8">{page.statement.label}</Label>
+      <h2 id="statement" class="mt-5 max-w-[20ch] text-[2.125rem] md:text-[4rem]">
+        {page.statement.text}
+      </h2>
+    </div>
+  </section>
+
+  <CtaBand heading={page.cta.heading} text={page.cta.text} tone="surface" />
+</BaseLayout>

@@ -1,0 +1,42 @@
+---
+interface Props {
+  href: string;
+}
+const { href } = Astro.props;
+---
+<a href={href} class="mg-door mg-card font-heading">
+  <span><slot /></span>
+  <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" focusable="false">
+    <path d="M2 12h19M14 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" />
+  </svg>
+</a>
+
+<style>
+  .mg-door {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 4.5rem;
+    padding: 1rem 1.25rem;
+    font-weight: var(--mg-weight-heading);
+    font-size: 1.375rem;
+    letter-spacing: -0.02em;
+    text-decoration: none;
+    color: var(--color-ink);
+    transition:
+      background-color 0.15s ease,
+      color 0.15s ease;
+  }
+  .mg-door svg {
+    flex-shrink: 0;
+    transition: transform 0.15s ease;
+  }
+  .mg-door:hover {
+    background: var(--color-ink);
+    color: var(--color-ground);
+  }
+  .mg-door:hover svg {
+    transform: translateX(0.25rem);
+  }
+</style>

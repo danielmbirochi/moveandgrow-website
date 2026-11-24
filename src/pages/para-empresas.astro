@@ -1,0 +1,51 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section from '../components/Section.astro';
+import Label from '../components/Label.astro';
+import NumberedItem from '../components/NumberedItem.astro';
+import Card from '../components/Card.astro';
+import OfferTable from '../components/OfferTable.astro';
+import CtaBand from '../components/CtaBand.astro';
+import Button from '../components/Button.astro';
+import page from '../content/empresas';
+import shell from '../content/shell';
+import { services } from '../lib/structured-data';
+
+const path = '/para-empresas/';
+---
+<BaseLayout
+  seo={page.seo}
+  breadcrumb={[{ name: page.breadcrumb, path }]}
+  jsonLd={services('companies', path)}
+>
+  <section class="bg-ground pt-16 pb-16 md:pt-28 md:pb-24" aria-labelledby="hero-title">
+    <div class="mg-container">
+      <Label as="p">{page.hero.label}</Label>
+      <h1 id="hero-title" class="mt-6 max-w-[18ch]">{page.hero.headline}</h1>
+      <p class="mg-lead mt-8 max-w-[40rem]">{page.hero.lead}</p>
+      <div class="mt-10">
+        <Button href="/contato/" arrow>{shell.cta}</Button>
+      </div>
+    </div>
+  </section>
+
+  <Section tone="surface" label={page.diagnostic.label} heading={page.diagnostic.heading}>
+    <Card as="article" class="max-w-[44rem]">
+      <h3 class="text-2xl">{page.diagnostic.point.title}</h3>
+      <p class="mg-body mt-3">{page.diagnostic.point.text}</p>
+      <a href="/mapa-da-operacao/" class="mg-link mt-6 inline-block">{page.diagnostic.link}</a>
+    </Card>
+  </Section>
+
+  <Section label={page.system.label} heading={page.system.heading}>
+    <ol class="grid gap-x-10 gap-y-12 md:grid-cols-3">
+      {page.system.items.map((p, i) => <NumberedItem as="li" n={i + 1} title={p.title} text={p.text} />)}
+    </ol>
+  </Section>
+
+  <Section tone="surface" label={page.offers.label} heading={page.offers.heading}>
+    <OfferTable audience="companies" />
+  </Section>
+
+  <CtaBand heading={page.cta.heading} text={page.cta.text} />
+</BaseLayout>

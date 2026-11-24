@@ -7,11 +7,13 @@ interface Props {
   text?: string;
   /** Heading element; h2 by default. */
   headingLevel?: 'h2' | 'h3';
+  /** Inverse by default; surface where it would sit next to another inverse band. */
+  tone?: 'inverse' | 'surface';
 }
-const { heading, text, headingLevel: H = 'h2' } = Astro.props;
+const { heading, text, headingLevel: H = 'h2', tone = 'inverse' } = Astro.props;
 ---
-<section class="mg-inverse py-16 md:py-24" aria-label={heading}>
-  <div class="mg-container grid items-end gap-8 md:grid-cols-12 md:gap-12">
+<section class:list={[tone === 'inverse' ? 'mg-inverse' : 'bg-surface', 'py-16 md:py-24']} aria-label={heading}>
+  <div class="mg-container grid items-center gap-8 md:grid-cols-12 md:gap-12">
     <H class="md:col-span-7">{heading}</H>
     <div class="md:col-span-5">
       {text && <p class="mg-lead mb-8">{text}</p>}
