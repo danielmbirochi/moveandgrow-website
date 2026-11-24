@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { readFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
 
 const read = (p: string) => readFileSync(new URL(`../${p}`, import.meta.url), 'utf8');
 
@@ -32,5 +32,33 @@ describe('CLAUDE.md', () => {
     const text = read('CLAUDE.md');
     expect(text).toContain('pull request');
     expect(text).toContain('atualizar-site');
+  });
+});
+
+describe('content map', () => {
+  const map = read('.claude/skills/atualizar-site/references/mapa-do-conteudo.md');
+
+  it('mentions every content module and the site config', () => {
+    const modules = readdirSync(new URL('../src/content/', import.meta.url))
+      .filter((f) => f.endsWith('.ts') && f !== 'types.ts');
+    for (const f of modules) expect(map, f).toContain(`src/content/${f}`);
+    expect(map).toContain('src/site.config.ts');
+  });
+
+  it('only points at files that exist', () => {
+    const paths = [...map.matchAll(/`((?:src|tests|docs)\/[^`\s]+\.\w+)`/g)].map((m) => m[1]);
+    expect(paths.length).toBeGreaterThan(5);
+    for (const p of paths) expect(existsSync(new URL(`../${p}`, import.meta.url)), p).toBe(true);
+  });
+});
+
+describe('voice reference', () => {
+  it('lists every avoided term the content test enforces', () => {
+    const voz = read('.claude/skills/atualizar-site/references/voz.md').toLowerCase();
+    const src = read('tests/content.test.ts');
+    const block = src.slice(src.indexOf('const banned = ['), src.indexOf('];', src.indexOf('const banned = [')));
+    const terms = [...block.matchAll(/'([^']+)'/g)].map((m) => m[1]);
+    expect(terms.length).toBeGreaterThan(10);
+    for (const t of terms) expect(voz, t).toContain(t.toLowerCase());
   });
 });
