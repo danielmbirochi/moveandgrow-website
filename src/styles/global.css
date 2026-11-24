@@ -1,0 +1,318 @@
+/*
+ * Tailwind entry and base styles. Every colour, family and radius below is a
+ * variable generated from the active theme (see theme.generated.css). The
+ * structural differences between themes hang off the data-* attributes on
+ * <html>: data-label (mono | pill), data-numbered (rule | circle) and
+ * data-card (outline | filled).
+ */
+@import 'tailwindcss';
+@import './theme.generated.css';
+
+@layer base {
+  html {
+    background: var(--color-ground);
+    color: var(--color-ink);
+    font-family: var(--font-body);
+    font-weight: var(--mg-weight-body);
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+    scroll-padding-top: 5rem;
+  }
+
+  body {
+    background: var(--color-ground);
+    color: var(--color-ink);
+    line-height: 1.6;
+    min-height: 100vh;
+    overflow-wrap: break-word;
+  }
+
+  h1,
+  h2,
+  h3,
+  .mg-heading {
+    font-family: var(--font-heading);
+    font-weight: var(--mg-weight-heading);
+    color: inherit;
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+    hyphens: manual;
+  }
+
+  h1 {
+    font-size: clamp(2.375rem, 1.35rem + 4.4vw, 4.75rem);
+    line-height: 1.02;
+    letter-spacing: -0.035em;
+  }
+
+  h2 {
+    font-size: clamp(1.75rem, 1.2rem + 2.3vw, 3rem);
+    letter-spacing: -0.03em;
+  }
+
+  h3 {
+    font-size: 1.3125rem;
+    line-height: 1.25;
+    letter-spacing: -0.015em;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  strong,
+  b {
+    font-weight: var(--mg-weight-strong);
+  }
+
+  a {
+    color: inherit;
+    text-underline-offset: 0.2em;
+    text-decoration-thickness: 0.08em;
+  }
+
+  ::selection {
+    background: var(--color-accent);
+    color: var(--color-on-accent);
+  }
+
+  :focus-visible {
+    outline: 0.1875rem solid var(--color-accent-text);
+    outline-offset: 0.1875rem;
+    border-radius: var(--radius-control);
+  }
+
+  .mg-inverse :focus-visible {
+    outline-color: var(--color-accent-text-on-inverse);
+  }
+
+  input,
+  textarea,
+  select,
+  button {
+    font: inherit;
+    color: inherit;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      transition-duration: 0.01ms !important;
+      animation-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  /* Layout */
+  .mg-container {
+    width: 100%;
+    max-width: 76rem;
+    margin-inline: auto;
+    padding-inline: 1rem;
+  }
+  @media (min-width: 40rem) {
+    .mg-container {
+      padding-inline: 2rem;
+    }
+  }
+
+  /* Skip link: hidden until focused */
+  .mg-skip {
+    position: absolute;
+    left: 1rem;
+    top: -10rem;
+    z-index: 100;
+    padding: 0.75rem 1rem;
+    background: var(--color-ink);
+    color: var(--color-ground);
+    border-radius: var(--radius-control);
+    font-weight: var(--mg-weight-strong);
+    text-decoration: none;
+  }
+  .mg-skip:focus {
+    top: 1rem;
+  }
+
+  /* Tones */
+  .mg-inverse {
+    background: var(--color-inverse-ground);
+    color: var(--color-inverse-ink);
+  }
+  .mg-inverse .mg-label,
+  .mg-inverse .mg-accent-text {
+    color: var(--color-accent-text-on-inverse);
+  }
+  .mg-inverse .mg-lead,
+  .mg-inverse .mg-body {
+    color: var(--color-inverse-ink);
+  }
+
+  .mg-lead {
+    font-size: clamp(1.0625rem, 0.98rem + 0.4vw, 1.3125rem);
+    line-height: 1.55;
+    color: var(--color-body);
+  }
+  .mg-body {
+    color: var(--color-body);
+  }
+  .mg-accent-text {
+    color: var(--color-accent-text);
+  }
+
+  /* Label: mono uppercase text, or a pill */
+  .mg-label {
+    display: inline-block;
+    font-family: var(--font-label);
+    font-weight: var(--mg-weight-label);
+    font-size: 0.8125rem;
+    line-height: 1.3;
+    color: var(--color-accent-text);
+  }
+  [data-label='mono'] .mg-label {
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  [data-label='pill'] .mg-label {
+    padding: 0.3125rem 0.875rem;
+    border-radius: var(--radius-pill);
+    background: var(--color-surface-raised);
+    font-size: 0.875rem;
+  }
+  [data-label='pill'] .mg-inverse .mg-label {
+    background: transparent;
+    box-shadow: inset 0 0 0 0.09375rem currentColor;
+  }
+
+  /* Numbered item: number over a thick rule, or a number in a circle */
+  .mg-num {
+    font-family: var(--font-label);
+    font-weight: var(--mg-weight-label);
+    color: var(--color-accent-text);
+    font-variant-numeric: tabular-nums;
+  }
+  [data-numbered='rule'] .mg-numbered {
+    border-top: 0.1875rem solid currentColor;
+    padding-top: 1rem;
+  }
+  [data-numbered='rule'] .mg-num {
+    display: block;
+    font-size: 0.875rem;
+    letter-spacing: 0.08em;
+    margin-bottom: 1.75rem;
+  }
+  [data-numbered='circle'] .mg-num {
+    display: inline-grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: var(--radius-pill);
+    background: var(--color-surface-raised);
+    font-size: 1rem;
+    margin-bottom: 1.25rem;
+  }
+  .mg-inverse .mg-num {
+    color: var(--color-accent-text-on-inverse);
+  }
+  [data-numbered='circle'] .mg-inverse .mg-num {
+    background: transparent;
+    box-shadow: inset 0 0 0 0.09375rem currentColor;
+  }
+
+  /* Card: outlined, or filled */
+  .mg-card {
+    border-radius: var(--radius-card);
+  }
+  [data-card='outline'] .mg-card {
+    border: 0.09375rem solid var(--color-ink);
+    background: var(--color-ground);
+  }
+  [data-card='filled'] .mg-card {
+    background: var(--color-surface);
+    border: 0.09375rem solid transparent;
+  }
+  .mg-card--placeholder {
+    border-style: dashed !important;
+    border-color: var(--color-muted) !important;
+  }
+
+  /* Buttons */
+  .mg-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.625rem;
+    min-height: 3rem;
+    padding: 0.75rem 1.375rem;
+    border-radius: var(--radius-control);
+    border: 0.09375rem solid transparent;
+    font-weight: var(--mg-weight-strong);
+    font-size: 1rem;
+    line-height: 1.2;
+    text-decoration: none;
+    text-align: center;
+    cursor: pointer;
+    transition:
+      background-color 0.15s ease,
+      color 0.15s ease,
+      border-color 0.15s ease;
+  }
+  .mg-btn--primary {
+    background: var(--color-accent);
+    color: var(--color-on-accent);
+    border-color: var(--color-accent);
+  }
+  .mg-btn--primary:hover {
+    background: var(--color-ink);
+    border-color: var(--color-ink);
+    color: var(--color-ground);
+  }
+  .mg-inverse .mg-btn--primary:hover {
+    background: var(--color-inverse-ink);
+    border-color: var(--color-inverse-ink);
+    color: var(--color-inverse-ground);
+  }
+  .mg-btn--secondary {
+    background: transparent;
+    color: var(--color-ink);
+    border-color: var(--color-ink);
+  }
+  .mg-btn--secondary:hover {
+    background: var(--color-ink);
+    color: var(--color-ground);
+  }
+  .mg-inverse .mg-btn--secondary {
+    color: var(--color-inverse-ink);
+    border-color: var(--color-inverse-ink);
+  }
+  .mg-inverse .mg-btn--secondary:hover {
+    background: var(--color-inverse-ink);
+    color: var(--color-inverse-ground);
+  }
+  .mg-btn[disabled],
+  .mg-btn[aria-disabled='true'] {
+    cursor: not-allowed;
+    background: var(--color-surface);
+    border-color: var(--color-border);
+    color: var(--color-muted);
+  }
+
+  /* Text link with an underline that thickens on hover */
+  .mg-link {
+    font-weight: var(--mg-weight-strong);
+    text-decoration: underline;
+    text-decoration-thickness: 0.09375rem;
+    text-underline-offset: 0.3em;
+  }
+  .mg-link:hover {
+    text-decoration-thickness: 0.1875rem;
+  }
+
+  .mg-rule {
+    border: 0;
+    border-top: 0.0625rem solid var(--color-border);
+  }
+}
