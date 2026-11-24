@@ -1,0 +1,207 @@
+---
+import { site, isConfigured } from '../site.config';
+import contato from '../content/contato';
+
+const f = contato.form;
+const emailOk = isConfigured(site.email);
+const whatsOk = isConfigured(site.whatsapp);
+const enabled = emailOk || whatsOk;
+// Without JavaScript the form posts to mailto: as text/plain. That action is
+// only emitted when a real address is configured.
+const action = emailOk ? `mailto:${site.email}?subject=${encodeURIComponent(f.subject)}` : undefined;
+---
+<form
+  class="mg-form"
+  method="post"
+  enctype="text/plain"
+  action={action}
+  data-email={emailOk ? site.email : undefined}
+  data-whatsapp={whatsOk ? site.whatsapp : undefined}
+  aria-describedby={enabled ? 'form-how' : 'form-status'}
+>
+  {
+    !enabled && (
+      <div id="form-status" class="mg-form__status" role="status">
+        <p class="mg-heading text-xl">{f.notConfigured}</p>
+        <p class="mt-2">{f.notConfiguredDetail}</p>
+      </div>
+    )
+  }
+  <fieldset disabled={!enabled} class="grid gap-6">
+    <div class="grid gap-6 sm:grid-cols-2">
+      <div class="mg-field">
+        <label for="nome">{f.nome}</label>
+        <input id="nome" name="nome" type="text" autocomplete="name" required />
+      </div>
+      <div class="mg-field">
+        <label for="empresa">{f.empresa}</label>
+        <input id="empresa" name="empresa" type="text" autocomplete="organization" required />
+      </div>
+    </div>
+
+    <fieldset class="mg-field">
+      <legend>{f.perfilLegend}</legend>
+      <div class="grid gap-3 sm:grid-cols-2">
+        <label class="mg-choice">
+          <input type="radio" name="perfil" value="agencia" required />
+          <span>{f.perfil.agencia}</span>
+        </label>
+        <label class="mg-choice">
+          <input type="radio" name="perfil" value="empresa" />
+          <span>{f.perfil.empresa}</span>
+        </label>
+      </div>
+    </fieldset>
+
+    <div class="grid gap-6 sm:grid-cols-2">
+      <div class="mg-field">
+        <label for="email">{f.email}</label>
+        <input id="email" name="email" type="email" autocomplete="email" inputmode="email" required />
+      </div>
+      <div class="mg-field">
+        <label for="whatsapp">{f.whatsapp} <span class="mg-hint">{f.whatsappHint}</span></label>
+        <input id="whatsapp" name="whatsapp" type="tel" autocomplete="tel" inputmode="tel" />
+      </div>
+    </div>
+
+    <div class="mg-field">
+      <label for="mensagem">{f.mensagem}</label>
+      <textarea id="mensagem" name="mensagem" rows="5" required></textarea>
+    </div>
+
+    <div class="flex flex-wrap gap-3">
+      <button type="submit" name="via" value="email" class="mg-btn mg-btn--primary" hidden={!emailOk && whatsOk}>
+        {f.sendEmail}
+      </button>
+      {
+        whatsOk && (
+          <button type="submit" name="via" value="whatsapp" class="mg-btn mg-btn--secondary" data-needs-js hidden>
+            {f.sendWhatsapp}
+          </button>
+        )
+      }
+    </div>
+    {enabled && <p id="form-how" class="mg-hint">{f.howItWorks}</p>}
+  </fieldset>
+</form>
+
+<script>
+  import { buildMailto, buildWhatsappUrl, type Brief } from '../lib/contact';
+
+  const form = document.querySelector<HTMLFormElement>('form.mg-form');
+  if (form && (form.dataset.email || form.dataset.whatsapp)) {
+    form.querySelectorAll<HTMLElement>('[data-needs-js]').forEach((el) => (el.hidden = false));
+    if (form.dataset.whatsapp && !form.dataset.email) {
+      form.querySelectorAll<HTMLElement>('button[value="email"]').forEach((el) => (el.hidden = true));
+    }
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const data = new FormData(form);
+      const get = (k: string) => String(data.get(k) ?? '');
+      const brief: Brief = {
+        nome: get('nome'),
+        empresa: get('empresa'),
+        perfil: get('perfil') === 'empresa' ? 'empresa' : 'agencia',
+        email: get('email'),
+        whatsapp: get('whatsapp'),
+        mensagem: get('mensagem'),
+      };
+      const via = (event.submitter as HTMLButtonElement | null)?.value;
+      if (via === 'whatsapp') {
+        const url = buildWhatsappUrl(brief, form.dataset.whatsapp ?? '');
+        if (url) window.open(url, '_blank', 'noopener');
+      } else {
+        const url = buildMailto(brief, form.dataset.email ?? '');
+        if (url) window.location.href = url;
+      }
+    });
+  }
+</script>
+
+<style>
+  .mg-form fieldset {
+    border: 0;
+    margin: 0;
+    padding: 0;
+    min-width: 0;
+  }
+  .mg-field input:disabled,
+  .mg-field textarea:disabled {
+    background: var(--color-surface);
+    border-color: var(--color-border);
+    cursor: not-allowed;
+  }
+  .mg-choice:has(input:disabled) {
+    background: var(--color-surface);
+    cursor: not-allowed;
+  }
+  .mg-form__status {
+    margin-bottom: 2rem;
+    padding: 1.25rem 1.25rem 1.25rem 1.5rem;
+    border-left: 0.25rem solid var(--color-accent);
+    background: var(--color-surface);
+    border-radius: var(--radius-control);
+    color: var(--color-ink);
+  }
+  .mg-field {
+    display: grid;
+    gap: 0.5rem;
+  }
+  .mg-field > label,
+  .mg-field > legend {
+    font-weight: var(--mg-weight-strong);
+    font-size: 0.9375rem;
+  }
+  .mg-field > legend {
+    margin-bottom: 0.5rem;
+  }
+  .mg-hint {
+    font-weight: var(--mg-weight-body);
+    font-size: 0.875rem;
+    color: var(--color-muted);
+  }
+  .mg-field input,
+  .mg-field textarea {
+    width: 100%;
+    min-height: 3rem;
+    padding: 0.75rem 0.875rem;
+    background: var(--color-ground);
+    color: var(--color-ink);
+    border: 0.09375rem solid var(--color-ink);
+    border-radius: var(--radius-control);
+  }
+  :global([data-card='filled']) .mg-field input,
+  :global([data-card='filled']) .mg-field textarea {
+    background: var(--color-surface);
+    border-color: var(--color-border);
+  }
+  .mg-field textarea {
+    resize: vertical;
+    min-height: 8rem;
+  }
+  .mg-field input:focus-visible,
+  .mg-field textarea:focus-visible {
+    outline-offset: 0.0625rem;
+  }
+  .mg-choice {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-height: 3rem;
+    padding: 0.75rem 0.875rem;
+    border: 0.09375rem solid var(--color-border);
+    border-radius: var(--radius-control);
+    cursor: pointer;
+    font-weight: var(--mg-weight-strong);
+  }
+  .mg-choice:has(input:checked) {
+    border-color: var(--color-ink);
+    box-shadow: inset 0 0 0 0.0625rem var(--color-ink);
+  }
+  .mg-choice input {
+    width: 1.125rem;
+    height: 1.125rem;
+    min-height: 0;
+    accent-color: var(--color-accent-text);
+  }
+</style>

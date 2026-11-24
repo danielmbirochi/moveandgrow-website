@@ -1,0 +1,86 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section from '../components/Section.astro';
+import Label from '../components/Label.astro';
+import Button from '../components/Button.astro';
+import CtaBand from '../components/CtaBand.astro';
+import page from '../content/mapa';
+import shell from '../content/shell';
+import { brand } from '../../visual-identity.config';
+import { site } from '../site.config';
+
+const path = '/mapa-da-operacao/';
+const serviceLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  '@id': new URL(`${path}#mapa`, site.url).href,
+  name: page.hero.headline,
+  description: page.hero.lead,
+  serviceType: page.hero.headline,
+  provider: { '@type': 'Organization', '@id': new URL('/#organization', site.url).href, name: brand.name },
+  areaServed: 'BR',
+  availableLanguage: 'pt-BR',
+  url: new URL(path, site.url).href,
+};
+---
+<BaseLayout seo={page.seo} breadcrumb={[{ name: page.breadcrumb, path }]} jsonLd={[serviceLd]}>
+  <section class="bg-ground pt-16 pb-16 md:pt-28 md:pb-24" aria-labelledby="hero-title">
+    <div class="mg-container">
+      <Label as="p">{page.hero.label}</Label>
+      <h1 id="hero-title" class="mt-6">{page.hero.headline}</h1>
+      <p class="mg-lead mt-6 font-semibold">{page.hero.intro}</p>
+      <p class="mg-heading mt-10 max-w-[30ch] text-[1.5rem] leading-snug md:text-[2.125rem]">
+        {page.hero.lead}
+      </p>
+      <div class="mt-10">
+        <Button href="/contato/" arrow>{shell.cta}</Button>
+      </div>
+    </div>
+  </section>
+
+  <Section tone="surface" label={page.facts.label} heading={page.facts.heading}>
+    <div class="grid gap-10 lg:grid-cols-12 lg:gap-16">
+      <dl class="mg-facts lg:col-span-8">
+        {
+          page.facts.items.map((item) => (
+            <div class="mg-facts__row">
+              <dt class="mg-label">{item.term}</dt>
+              <dd class="mg-body">{item.detail}</dd>
+            </div>
+          ))
+        }
+      </dl>
+      <aside class="mg-card self-start p-6 sm:p-8 lg:col-span-4" aria-label={page.honest.label}>
+        <Label as="p">{page.honest.label}</Label>
+        <p class="mg-heading mt-4 text-[1.375rem] leading-snug">{page.honest.text}</p>
+      </aside>
+    </div>
+  </Section>
+
+  <CtaBand heading={page.cta.heading} />
+</BaseLayout>
+
+<style>
+  .mg-facts__row {
+    display: grid;
+    gap: 0.5rem;
+    padding-block: 1.25rem 1.5rem;
+    border-top: 0.0625rem solid var(--color-border);
+  }
+  .mg-facts__row:first-child {
+    border-top: 0.1875rem solid var(--color-ink);
+  }
+  .mg-facts dd {
+    margin: 0;
+    font-size: 1.0625rem;
+  }
+  @media (min-width: 45rem) {
+    .mg-facts__row {
+      grid-template-columns: 13rem 1fr;
+      gap: 2rem;
+    }
+    .mg-facts dt {
+      padding-top: 0.25rem;
+    }
+  }
+</style>

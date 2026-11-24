@@ -292,7 +292,7 @@
     background: var(--color-inverse-ink);
     color: var(--color-inverse-ground);
   }
-  .mg-btn[disabled],
+  .mg-btn:disabled,
   .mg-btn[aria-disabled='true'] {
     cursor: not-allowed;
     background: var(--color-surface);

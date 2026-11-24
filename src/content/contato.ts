@@ -16,6 +16,7 @@ export default {
     nome: 'Nome',
     empresa: 'Empresa',
     perfilLegend: 'Você é',
+    perfilLabel: 'Perfil',
     perfil: { agencia: 'Sou agência', empresa: 'Sou empresa' },
     email: 'E-mail',
     whatsapp: 'WhatsApp',
@@ -31,10 +32,5 @@ export default {
       'O e-mail e o WhatsApp ainda estão sendo configurados. O formulário fica disponível assim que estiverem prontos.',
     subject: 'Mapa da Operação',
     briefIntro: 'Olá! Quero mapear a minha operação.',
-  },
-  direct: {
-    heading: 'Contato direto',
-    email: 'E-mail',
-    whatsapp: 'WhatsApp',
   },
 };

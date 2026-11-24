@@ -1,0 +1,46 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section from '../components/Section.astro';
+import Label from '../components/Label.astro';
+import FounderCard from '../components/FounderCard.astro';
+import Commitments from '../components/Commitments.astro';
+import CtaBand from '../components/CtaBand.astro';
+import page from '../content/sobre';
+import agencias from '../content/agencias';
+
+const path = '/sobre/';
+---
+<BaseLayout seo={page.seo} breadcrumb={[{ name: page.breadcrumb, path }]}>
+  <section class="bg-ground pt-16 pb-16 md:pt-28 md:pb-24" aria-labelledby="hero-title">
+    <div class="mg-container">
+      <Label as="p">{page.hero.label}</Label>
+      <h1 id="hero-title" class="mt-6 max-w-[16ch]">{page.hero.headline}</h1>
+      <div class="mt-10 grid max-w-[60rem] gap-6 md:grid-cols-2 md:gap-10">
+        {page.hero.paragraphs.map((p) => <p class="mg-lead">{p}</p>)}
+      </div>
+    </div>
+  </section>
+
+  <Section tone="surface" label={page.foundersSection.label} heading={page.foundersSection.heading}>
+    <div class="grid gap-6 md:grid-cols-2">
+      {
+        page.founders.map((f) => (
+          <FounderCard
+            name={f.name}
+            bio={f.bio}
+            initials={f.initials}
+            role={f.role}
+            placeholder={f.placeholder}
+            placeholderNote={page.foundersSection.placeholderNote}
+          />
+        ))
+      }
+    </div>
+  </Section>
+
+  <Section label={page.commitments.label} heading={page.commitments.heading}>
+    <Commitments compact />
+  </Section>
+
+  <CtaBand heading={agencias.cta.heading} text={agencias.cta.text} />
+</BaseLayout>

@@ -97,7 +97,7 @@ The spec's Services table gives some cells as instructions in English; these are
 - Buttons: "Enviar por e-mail", "Enviar por WhatsApp"
 - How it works: "Ao enviar, abrimos o seu e-mail ou o WhatsApp com a mensagem pronta. Nada fica guardado neste site."
 - While contact details are placeholders: "Contato em configuração." and "O e-mail e o WhatsApp ainda estão sendo configurados. O formulário fica disponível assim que estiverem prontos."
-- Pre-filled message: subject "Mapa da Operação"; first line "Olá! Quero mapear a minha operação."
+- Pre-filled message: subject "Mapa da Operação: <empresa>"; first line "Olá! Quero mapear a minha operação."; the profile line is labelled "Perfil"; other lines reuse the field labels
 
 ## Theme adjustments
 
