@@ -1,0 +1,74 @@
+---
+import Wordmark from './Wordmark.astro';
+import { brand } from '../../visual-identity.config';
+import { site, isConfigured } from '../site.config';
+import shell from '../content/shell';
+
+const emailOk = isConfigured(site.email);
+const whatsOk = isConfigured(site.whatsapp);
+const whatsDigits = site.whatsapp.replace(/\D/g, '');
+const year = new Date().getFullYear();
+---
+<footer class="mg-inverse">
+  <div class="mg-container grid gap-12 py-16 md:grid-cols-12 md:py-20">
+    <div class="md:col-span-5">
+      <a href="/" class="no-underline" aria-label={`${brand.name}, ${shell.homeLink}`}>
+        <Wordmark inverse />
+      </a>
+      <p class="mt-5 max-w-xs">{shell.footer.tagline}</p>
+    </div>
+
+    <nav aria-label={shell.footer.pages} class="md:col-span-3">
+      <h2 class="mg-label">{shell.footer.pages}</h2>
+      <ul class="mt-5 space-y-3">
+        {
+          site.nav.map((item) => (
+            <li>
+              <a href={item.href} class="no-underline hover:underline">
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+        <li>
+          <a href="/contato/" class="no-underline hover:underline">{shell.footer.contactPage}</a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="md:col-span-4">
+      <h2 class="mg-label">{shell.footer.contact}</h2>
+      {
+        emailOk || whatsOk ? (
+          <ul class="mt-5 space-y-3">
+            {emailOk && (
+              <li>
+                {shell.footer.email}: <a href={`mailto:${site.email}`}>{site.email}</a>
+              </li>
+            )}
+            {whatsOk && (
+              <li>
+                {shell.footer.whatsapp}: <a href={`https://wa.me/${whatsDigits}`}>{site.whatsapp}</a>
+              </li>
+            )}
+          </ul>
+        ) : (
+          <p class="mt-5">{shell.footer.notConfigured}</p>
+        )
+      }
+    </div>
+  </div>
+  <div class="mg-container pb-10">
+    <p class="mg-footnote border-t pt-6 text-sm">© {year} {brand.name}</p>
+  </div>
+</footer>
+
+<style>
+  footer h2 {
+    font-size: 0.8125rem;
+    letter-spacing: 0.08em;
+  }
+  .mg-footnote {
+    border-color: var(--color-muted);
+  }
+</style>

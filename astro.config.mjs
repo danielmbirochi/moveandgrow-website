@@ -9,6 +9,7 @@ import { site } from './src/site.config.ts';
 // The active theme (visual-identity.config.ts, or MG_THEME) becomes two CSS
 // files before Vite starts: Tailwind tokens, and the theme's own fonts only.
 const theme = resolveTheme();
+/** @param {string} rel @param {string} text */
 const writeIfChanged = (rel, text) => {
   const path = fileURLToPath(new URL(rel, import.meta.url));
   if (!existsSync(path) || readFileSync(path, 'utf8') !== text) writeFileSync(path, text);

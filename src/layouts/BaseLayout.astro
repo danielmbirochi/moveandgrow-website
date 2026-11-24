@@ -1,0 +1,66 @@
+---
+import '../styles/fonts.generated.css';
+import '../styles/global.css';
+import Seo from '../components/Seo.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { resolveTheme, isDarkTheme } from '../themes';
+import { brand } from '../../visual-identity.config';
+import { site } from '../site.config';
+import shell from '../content/shell';
+
+type Crumb = { name: string; path: string };
+
+interface Props {
+  seo: { title: string; description: string };
+  /** Trail below Home for inner pages; renders BreadcrumbList JSON-LD. */
+  breadcrumb?: Crumb[];
+  jsonLd?: Record<string, unknown>[];
+}
+
+const { seo, breadcrumb, jsonLd = [] } = Astro.props;
+const theme = resolveTheme();
+const path = Astro.url.pathname;
+
+const ld = [...jsonLd];
+if (breadcrumb?.length) {
+  const trail: Crumb[] = [{ name: shell.breadcrumbRoot, path: '/' }, ...breadcrumb];
+  ld.push({
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: trail.map((c, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: c.name,
+      item: new URL(c.path, site.url).href,
+    })),
+  });
+}
+---
+<!doctype html>
+<html
+  lang="pt-BR"
+  data-theme={theme.name}
+  data-label={theme.style.label}
+  data-numbered={theme.style.numbered}
+  data-card={theme.style.card}
+>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content={theme.colors.ground} />
+    <meta name="color-scheme" content={isDarkTheme(theme) ? 'dark' : 'light'} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta name="application-name" content={brand.name} />
+    <Seo title={seo.title} description={seo.description} path={path} jsonLd={ld} />
+  </head>
+  <body>
+    <a href="#conteudo" class="mg-skip">{shell.skipLink}</a>
+    <Header />
+    <main id="conteudo" tabindex="-1">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

@@ -135,3 +135,8 @@ export function themeToCss(theme: Theme): string {
   ];
   return lines.join('\n');
 }
+
+/** True when the theme's ground is dark (used for the color-scheme hint). */
+export function isDarkTheme(theme: Theme): boolean {
+  return luminance(theme.colors.ground) < 0.18;
+}
