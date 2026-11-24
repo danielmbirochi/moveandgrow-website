@@ -52,6 +52,12 @@ const routeFile = (route) => join(dist, route, 'index.html');
 for (const route of routes) {
   if (!existsSync(routeFile(route))) fail(`route ${route} missing (no ${rel(routeFile(route))})`);
 }
+// The host serves dist/404.html with a 404 status for unknown URLs. Without
+// it, Cloudflare Pages answers every unknown URL with the home page and 200.
+const errorPages = ['404.html'];
+for (const page of errorPages) {
+  if (!existsSync(join(dist, page))) fail(`${page} missing`);
+}
 
 // --- Per-page checks --------------------------------------------------------
 const resolves = (href) => {
@@ -70,11 +76,21 @@ for (const file of htmlFiles) {
   if (h1s !== 1) fail(`${page}: expected exactly one <h1>, found ${h1s}`);
   if (!/<title>[^<]+<\/title>/.test(html)) fail(`${page}: missing <title>`);
   if (!/<meta name="description" content="[^"]+"/.test(html)) fail(`${page}: missing meta description`);
-  if (!/<link rel="canonical" href="[^"]+"/.test(html)) fail(`${page}: missing canonical link`);
+  // Error pages are not content: noindex, no canonical URL, no structured data.
+  const isErrorPage = errorPages.includes(page);
+  const hasCanonical = /<link rel="canonical" href="[^"]+"/.test(html);
+  const hasNoindex = /<meta name="robots" content="[^"]*noindex/.test(html);
+  if (isErrorPage) {
+    if (!hasNoindex) fail(`${page}: error page is not noindex`);
+    if (hasCanonical) fail(`${page}: error page has a canonical link`);
+  } else {
+    if (!hasCanonical) fail(`${page}: missing canonical link`);
+    if (hasNoindex) fail(`${page}: is noindex`);
+  }
   if (!/<html[^>]*\slang="pt-BR"/.test(html)) fail(`${page}: missing lang="pt-BR" on <html>`);
 
   const ld = [...html.matchAll(/<script type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g)];
-  if (ld.length === 0) fail(`${page}: no application/ld+json`);
+  if (ld.length === 0 && !isErrorPage) fail(`${page}: no application/ld+json`);
   for (const [, json] of ld) {
     try {
       JSON.parse(json);
@@ -105,6 +121,7 @@ if (!existsSync(sitemapIndex)) fail('sitemap-index.xml missing');
 const sitemaps = files.filter((f) => /sitemap.*\.xml$/.test(f));
 for (const s of sitemaps) {
   if (readFileSync(s, 'utf8').includes('_kit')) fail(`${rel(s)}: lists _kit`);
+  if (/\/404[/<]/.test(readFileSync(s, 'utf8'))) fail(`${rel(s)}: lists the 404 page`);
 }
 const sitemapText = sitemaps.map((s) => readFileSync(s, 'utf8')).join('\n');
 for (const route of routes) {
@@ -115,6 +132,9 @@ for (const route of routes) {
 if (!existsSync(join(dist, 'robots.txt'))) fail('robots.txt missing');
 else if (!/Sitemap:\s*\S+sitemap-index\.xml/.test(readFileSync(join(dist, 'robots.txt'), 'utf8'))) {
   fail('robots.txt does not point to the sitemap');
+}
+for (const f of files.filter((f) => /\.(html|xml|txt)$/.test(f))) {
+  if (readFileSync(f, 'utf8').includes('example.com')) fail(`${rel(f)}: contains the placeholder host example.com`);
 }
 for (const asset of ['favicon.svg', 'og-default.png']) {
   if (!existsSync(join(dist, asset))) fail(`${asset} missing`);

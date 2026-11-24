@@ -1,0 +1,19 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Label from '../components/Label.astro';
+import Button from '../components/Button.astro';
+import page from '../content/not-found';
+---
+<BaseLayout seo={page.seo} noindex>
+  <section class="bg-ground pt-16 pb-20 md:pt-28 md:pb-28" aria-labelledby="hero-title">
+    <div class="mg-container">
+      <Label as="p">{page.hero.label}</Label>
+      <h1 id="hero-title" class="mt-6 max-w-[16ch]">{page.hero.headline}</h1>
+      <p class="mg-lead mt-8 max-w-[34rem]">{page.hero.lead}</p>
+      <div class="mt-10 flex flex-wrap items-center gap-4">
+        <Button href="/" arrow>{page.links.home}</Button>
+        <Button href="/contato/" variant="secondary">{page.links.contact}</Button>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

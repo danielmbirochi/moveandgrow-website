@@ -18,6 +18,7 @@ Titles are rendered as `<title> | <brand name>`; the brand name comes from
 | Mapa da Operação | Mapa da Operação: o primeiro passo | Em duas semanas, um mapa por escrito do que funciona, onde está o desperdício e o que fazer primeiro. O mapa é seu, com ou sem a gente. |
 | Sobre | Sobre: marketing e engenharia no mesmo time | Marketing e engenharia no mesmo time, sem repasse entre agência e fornecedor de software. Conheça os sócios e os nossos compromissos. |
 | Contato | Contato: mapeie a sua operação | Conte como funciona o seu marketing hoje e o que você gostaria de melhorar. A conversa começa pelo Mapa da Operação. |
+| Página não encontrada (404) | Página não encontrada | Esta página não existe ou mudou de endereço. Volte para o início ou conte o que você procurava na página de contato. |
 
 ## Site shell (`src/content/shell.ts`)
 
@@ -105,3 +106,12 @@ None. Every colour pair in both themes passes the contrast test with the spec's 
 ## Share image
 
 `src/assets/og/<theme>.png` (rendered by `scripts/make-og.mjs`) shows the brand name, the Home label "Marketing + engenharia" and the approved Home headline. No new copy.
+
+## Página não encontrada (`src/content/not-found.ts`)
+
+Served for unknown URLs (`dist/404.html`). Not indexed, not in the sitemap.
+
+- Hero label: "Erro 404"
+- Headline: "Página não encontrada."
+- Lead: "O endereço pode ter mudado ou nunca ter existido. O restante do site continua no lugar."
+- Links: "Voltar para o início" (Home), "Ir para o contato" (Contato)
