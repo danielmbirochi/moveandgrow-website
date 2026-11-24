@@ -10,6 +10,9 @@ describe('claude settings', () => {
     const deny: string[] = settings.permissions.deny;
     expect(deny.some((r) => r.includes('git push') && r.includes('main'))).toBe(true);
     expect(deny.some((r) => r.includes('--force'))).toBe(true);
+    for (const target of ['refs/heads/main', '--mirror', '--all']) {
+      expect(deny.some((r) => r.includes('git push') && r.includes(target)), target).toBe(true);
+    }
 
     const pushAllows = (settings.permissions.allow as string[]).filter((r) => r.includes('git push'));
     expect(pushAllows.length).toBeGreaterThan(0);
