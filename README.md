@@ -48,7 +48,7 @@ writes the name.
 How it works: `astro.config.mjs` resolves the active theme and writes
 `src/styles/theme.generated.css` (Tailwind `@theme` tokens such as
 `--color-ground`, `--font-heading`, `--radius-card`) and
-`src/styles/fonts.generated.css`, plus `public/favicon.svg` and
+`src/styles/fonts.generated.css`, plus `public/favicon.svg`, `public/logo.svg` and
 `public/og-default.png`. Components only use the role utilities (`bg-ground`,
 `text-ink`, `rounded-card`, `font-label`, ...) and the `data-label`,
 `data-numbered`, `data-card` attributes on `<html>`.
@@ -125,8 +125,10 @@ Code on the web does not limit which branches a push can update.
   (`[Cargo e resultados a confirmar.]`) and initials. The card is marked
   "Texto provisório" until `placeholder: true` is removed.
 - Founder photos: initials only.
-- Logo: a text wordmark and a geometric mark (`src/components/Wordmark.astro`).
-- After changing the brand name or the Home headline, run `npm run og`.
+- Logo: `src/assets/logo.svg` is the single source. `src/components/Wordmark.astro`,
+  the favicon, `public/logo.svg` and the share image repaint it in theme
+  colours (`src/lib/logo.ts`).
+- After changing the logo or the Home headline, run `npm run og`.
 
 ## Checks
 

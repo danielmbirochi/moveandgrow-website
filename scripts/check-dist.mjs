@@ -136,7 +136,7 @@ else if (!/Sitemap:\s*\S+sitemap-index\.xml/.test(readFileSync(join(dist, 'robot
 for (const f of files.filter((f) => /\.(html|xml|txt)$/.test(f))) {
   if (readFileSync(f, 'utf8').includes('example.com')) fail(`${rel(f)}: contains the placeholder host example.com`);
 }
-for (const asset of ['favicon.svg', 'og-default.png']) {
+for (const asset of ['favicon.svg', 'logo.svg', 'og-default.png']) {
   if (!existsSync(join(dist, asset))) fail(`${asset} missing`);
 }
 

@@ -1,16 +1,16 @@
 // Renders the default share image (1200x630) for every theme into
 // src/assets/og/<theme>.png. astro.config.mjs copies the active theme's image
 // to public/og-default.png at build time, so switching themes needs no extra
-// step. Re-run (`npm run og`) after changing a theme, the brand name or the
+// step. Re-run (`npm run og`) after changing a theme, the logo or the
 // Home headline. Uses the installed Google Chrome through Playwright.
 import { chromium } from 'playwright';
 import { readFileSync, readdirSync, mkdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { paintLogo } from '../src/lib/logo.ts';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
-const identity = readFileSync(join(root, 'visual-identity.config.ts'), 'utf8');
-const brand = identity.match(/name:\s*'([^']+)'/)[1];
+const logo = readFileSync(join(root, 'src/assets/logo.svg'), 'utf8');
 const home = readFileSync(join(root, 'src/content/home.ts'), 'utf8');
 const headline = home.match(/headline:\s*'([^']+)'/)[1];
 const label = home.match(/label:\s*'([^']+)'/)[1];
@@ -58,13 +58,12 @@ for (const t of themes) {
     *{margin:0;box-sizing:border-box}
     body{width:1200px;height:630px;background:${t.ground};color:${t.ink};padding:72px 80px;display:flex;flex-direction:column;justify-content:space-between;font-family:'${t.heading.family}';}
     .top{display:flex;align-items:center;gap:20px;font-weight:${t.heading.weight};font-size:36px;letter-spacing:-0.02em}
-    .mark{position:relative;width:48px;height:48px;background:${t.ink};border-radius:${t.radius};overflow:hidden}
-    .mark i{position:absolute;right:0;bottom:0;width:20px;height:20px;background:${t.accent}}
+    .top svg{height:56px;width:auto;display:block}
     .label{font-family:'${t.labelFont.family}';font-weight:${t.labelFont.weight};font-size:24px;color:${t.accentText};${t.mono ? 'text-transform:uppercase;letter-spacing:0.08em;' : ''}}
     h1{font-weight:${t.heading.weight};font-size:84px;line-height:1.02;letter-spacing:-0.035em;max-width:1000px;margin-top:22px;text-wrap:balance}
     .rule{height:6px;width:120px;background:${t.accent}}
   </style></head><body>
-    <div class="top"><span class="mark"><i></i></span>${brand}</div>
+    <div class="top">${paintLogo(logo, t.ink, t.accent)}</div>
     <div><p class="label">${label}</p><h1>${headline}</h1></div>
     <div class="rule"></div>
   </body></html>`;
