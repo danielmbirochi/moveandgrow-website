@@ -1,0 +1,12 @@
+---
+interface Props {
+  as?: 'div' | 'article' | 'li';
+  /** Dashed, clearly provisional card (for content still to be written). */
+  placeholder?: boolean;
+  class?: string;
+}
+const { as: Tag = 'div', placeholder = false, class: className = '' } = Astro.props;
+---
+<Tag class:list={['mg-card p-6 sm:p-8', { 'mg-card--placeholder': placeholder }, className]}>
+  <slot />
+</Tag>

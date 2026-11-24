@@ -1,0 +1,61 @@
+---
+// Dev-only component gallery. The leading underscore keeps it out of the
+// build; astro.config.mjs injects it at /_kit/ when running `npm run dev`.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/Button.astro';
+import Label from '../components/Label.astro';
+import NumberedItem from '../components/NumberedItem.astro';
+import Card from '../components/Card.astro';
+import Section from '../components/Section.astro';
+import OfferTable from '../components/OfferTable.astro';
+import Commitments from '../components/Commitments.astro';
+import CtaBand from '../components/CtaBand.astro';
+import FounderCard from '../components/FounderCard.astro';
+import Wordmark from '../components/Wordmark.astro';
+import sobre from '../content/sobre';
+---
+<BaseLayout seo={{ title: 'Kit de componentes', description: 'Galeria interna de componentes, apenas no servidor de desenvolvimento.' }}>
+  <Section label="Kit" heading="Componentes">
+    <h1 class="sr-only">Kit</h1>
+    <div class="flex flex-wrap items-center gap-4">
+      <Button href="/contato/">Primary</Button>
+      <Button href="/contato/" variant="secondary">Secondary</Button>
+      <Button href="/contato/" arrow>Primary com seta</Button>
+      <Label>Label</Label>
+      <Wordmark />
+    </div>
+  </Section>
+  <Section tone="surface" label="Surface" heading="Numbered items" lead="Lead text on surface.">
+    <div class="grid gap-10 md:grid-cols-3">
+      <NumberedItem n={1} title="Um título" text="Texto de apoio." />
+      <NumberedItem n={2} title="Outro título" text="Texto de apoio." />
+      <NumberedItem n={3} title="Terceiro" />
+    </div>
+  </Section>
+  <Section tone="inverse" label="Inverse" heading="Inverse section" lead="Lead on inverse.">
+    <div class="flex flex-wrap gap-4">
+      <Button href="/contato/">Primary</Button>
+      <Button href="/contato/" variant="secondary">Secondary</Button>
+    </div>
+    <div class="mt-10 grid gap-10 md:grid-cols-3">
+      <NumberedItem n={1} title="Numbered on inverse" text="Texto." />
+    </div>
+  </Section>
+  <Section heading="Cards">
+    <div class="grid gap-6 md:grid-cols-2">
+      <Card><Label as="p">Card</Label><p class="mt-4">Conteúdo do card.</p></Card>
+      <Card placeholder><Label as="p">Placeholder</Label><p class="mt-4">Card provisório.</p></Card>
+    </div>
+  </Section>
+  <Section heading="Commitments"><Commitments /></Section>
+  <Section heading="Commitments compact" tone="surface"><Commitments compact /></Section>
+  <Section heading="Offers: all"><OfferTable audience="all" /></Section>
+  <Section heading="Offers: agencies"><OfferTable audience="agencies" /></Section>
+  <Section heading="Offers: companies"><OfferTable audience="companies" /></Section>
+  <Section heading="Founders">
+    <div class="grid gap-6 md:grid-cols-2">
+      {sobre.founders.map((f) => <FounderCard {...f} placeholderNote={sobre.foundersSection.placeholderNote} />)}
+    </div>
+  </Section>
+  <CtaBand heading="Cta band" text="Texto de apoio do CTA." />
+</BaseLayout>

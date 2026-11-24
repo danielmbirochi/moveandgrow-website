@@ -30,6 +30,19 @@ export default defineConfig({
     locales: ['pt-br'],
     routing: { prefixDefaultLocale: false },
   },
+  integrations: [
+    {
+      // Component gallery at /_kit/, served by the dev server only.
+      name: 'mg-dev-kit',
+      hooks: {
+        'astro:config:setup': ({ command, injectRoute }) => {
+          if (command === 'dev') {
+            injectRoute({ pattern: '/_kit', entrypoint: './src/pages/_kit.astro' });
+          }
+        },
+      },
+    },
+  ],
   vite: {
     plugins: [tailwindcss()],
   },

@@ -1,0 +1,17 @@
+---
+import NumberedItem from './NumberedItem.astro';
+import { commitments } from '../content/commitments';
+
+interface Props {
+  /** Short texts, for pages where the commitments are a reminder. */
+  compact?: boolean;
+}
+const { compact = false } = Astro.props;
+---
+<ol class="grid gap-x-10 gap-y-12 md:grid-cols-3">
+  {
+    commitments.map((c, i) => (
+      <NumberedItem as="li" n={i + 1} title={c.title} text={compact ? c.short : c.text} />
+    ))
+  }
+</ol>

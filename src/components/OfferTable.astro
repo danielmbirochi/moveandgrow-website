@@ -1,0 +1,183 @@
+---
+import { offers, offerTableCopy as t, type Offer } from '../content/offers';
+
+interface Props {
+  audience?: 'agencies' | 'companies' | 'all';
+}
+const { audience = 'all' } = Astro.props;
+
+type Column = { key: 'agencies' | 'companies'; heading: string };
+const columns: Column[] =
+  audience === 'all'
+    ? [
+        { key: 'agencies', heading: t.agencies },
+        { key: 'companies', heading: t.companies },
+      ]
+    : [{ key: audience, heading: audience === 'agencies' ? t.agencies : t.companies }];
+
+// Rows with a null cell for the chosen audience are omitted.
+const rows: Offer[] = audience === 'all' ? offers : offers.filter((o) => o[audience] !== null);
+---
+<div class="mg-offers" data-cols={columns.length}>
+  <table class="font-body">
+    <caption class="sr-only">{t.caption}</caption>
+    <thead>
+      <tr>
+        <th scope="col" class="font-label">{t.offer}</th>
+        <th scope="col" class="font-label">{t.covers}</th>
+        {columns.map((c) => <th scope="col" class="font-label">{c.heading}</th>)}
+      </tr>
+    </thead>
+    <tbody>
+      {
+        rows.map((o, i) => (
+          <tr>
+            <th scope="row">
+              <span class="mg-offers__n font-label" aria-hidden="true">
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <span class="mg-offers__name font-heading">{o.name}</span>
+            </th>
+            <td data-th={t.covers} class="before:font-label">{o.covers}</td>
+            {columns.map((c) => (
+              <td data-th={c.heading} class:list={['before:font-label', { 'mg-offers__none': o[c.key] === null }]}>
+                {o[c.key] ?? t.notOffered}
+              </td>
+            ))}
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+  {
+    (audience === 'all' || audience === 'agencies') && (
+      <p class="mg-offers__note">{t.campaignsNote}</p>
+    )
+  }
+</div>
+
+<style>
+  .mg-offers table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+  }
+  .mg-offers thead th {
+    font-weight: var(--mg-weight-label);
+    font-size: 0.8125rem;
+    color: var(--color-muted);
+    padding: 0 1.25rem 0.875rem 0;
+    vertical-align: bottom;
+  }
+  :global([data-label='mono']) .mg-offers thead th {
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .mg-offers tbody tr {
+    border-top: 0.0625rem solid var(--color-border);
+  }
+  .mg-offers tbody tr:first-child {
+    border-top: 0.1875rem solid var(--color-ink);
+  }
+  .mg-offers tbody th,
+  .mg-offers td {
+    padding: 1.5rem 1.25rem 1.625rem 0;
+    vertical-align: top;
+  }
+  .mg-offers td {
+    color: var(--color-body);
+    font-size: 0.9375rem;
+    line-height: 1.55;
+  }
+  .mg-offers__n {
+    display: block;
+    font-weight: var(--mg-weight-label);
+    font-size: 0.8125rem;
+    letter-spacing: 0.08em;
+    color: var(--color-accent-text);
+    margin-bottom: 0.5rem;
+  }
+  .mg-offers__name {
+    display: block;
+    font-weight: var(--mg-weight-heading);
+    font-size: 1.25rem;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    color: var(--color-ink);
+  }
+  .mg-offers__none {
+    color: var(--color-muted) !important;
+  }
+  .mg-offers__note {
+    margin-top: 1.5rem;
+    font-size: 0.875rem;
+    color: var(--color-muted);
+    max-width: 44rem;
+  }
+  :global([data-card='filled']) .mg-offers tbody tr:first-child {
+    border-top-color: var(--color-border);
+  }
+
+  /* Wide screens: fixed proportions per column count */
+  @media (min-width: 45rem) {
+    .mg-offers[data-cols='2'] th:first-child {
+      width: 22%;
+    }
+    .mg-offers[data-cols='1'] th:first-child {
+      width: 26%;
+    }
+    .mg-offers[data-cols='1'] td:last-child {
+      width: 34%;
+    }
+  }
+
+  /* Below 720px: each row becomes a stacked card */
+  @media (max-width: 44.999rem) {
+    .mg-offers thead {
+      position: absolute;
+      width: 0.0625rem;
+      height: 0.0625rem;
+      overflow: hidden;
+      clip-path: inset(50%);
+    }
+    .mg-offers table,
+    .mg-offers tbody,
+    .mg-offers tr,
+    .mg-offers th,
+    .mg-offers td {
+      display: block;
+    }
+    .mg-offers tbody {
+      display: grid;
+      gap: 1rem;
+    }
+    .mg-offers tbody tr,
+    .mg-offers tbody tr:first-child {
+      border-radius: var(--radius-card);
+      padding: 1.25rem 1.25rem 0.5rem;
+    }
+    :global([data-card='outline']) .mg-offers tbody tr {
+      border: 0.09375rem solid var(--color-ink);
+    }
+    :global([data-card='filled']) .mg-offers tbody tr {
+      border: 0;
+      background: var(--color-surface);
+    }
+    .mg-offers tbody th,
+    .mg-offers td {
+      padding: 0 0 1rem;
+    }
+    .mg-offers td::before {
+      content: attr(data-th);
+      display: block;
+      font-weight: var(--mg-weight-label);
+      font-size: 0.75rem;
+      color: var(--color-muted);
+      margin-bottom: 0.25rem;
+    }
+    :global([data-label='mono']) .mg-offers td::before {
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+  }
+</style>

@@ -1,0 +1,21 @@
+---
+import Button from './Button.astro';
+import shell from '../content/shell';
+
+interface Props {
+  heading: string;
+  text?: string;
+  /** Heading element; h2 by default. */
+  headingLevel?: 'h2' | 'h3';
+}
+const { heading, text, headingLevel: H = 'h2' } = Astro.props;
+---
+<section class="mg-inverse py-16 md:py-24" aria-label={heading}>
+  <div class="mg-container grid items-end gap-8 md:grid-cols-12 md:gap-12">
+    <H class="md:col-span-7">{heading}</H>
+    <div class="md:col-span-5">
+      {text && <p class="mg-lead mb-8">{text}</p>}
+      <Button href="/contato/" arrow>{shell.cta}</Button>
+    </div>
+  </div>
+</section>

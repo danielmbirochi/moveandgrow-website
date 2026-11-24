@@ -1,0 +1,51 @@
+---
+import Card from './Card.astro';
+import Label from './Label.astro';
+
+interface Props {
+  name: string;
+  bio: string;
+  initials: string;
+  role?: string;
+  /** Marks the card as provisional text still to be confirmed. */
+  placeholder?: boolean;
+  placeholderNote?: string;
+}
+const { name, bio, initials, role, placeholder = false, placeholderNote } = Astro.props;
+---
+<Card as="article" placeholder={placeholder} class="flex h-full flex-col">
+  <div class="flex items-start justify-between gap-4">
+    <div class="mg-avatar font-label" aria-hidden="true">
+      <span>{initials}</span>
+    </div>
+    {placeholder && placeholderNote && <span class="mg-provisional font-label">{placeholderNote}</span>}
+  </div>
+  {role && <Label as="p" class="mt-8">{role}</Label>}
+  <h3 class="mt-3 text-2xl">{name}</h3>
+  <p class="mg-body mt-4">{bio}</p>
+</Card>
+
+<style>
+  .mg-avatar {
+    display: grid;
+    place-items: center;
+    width: 5.5rem;
+    height: 5.5rem;
+    background: var(--color-surface-raised);
+    color: var(--color-ink);
+    border-radius: var(--radius-card);
+    font-weight: var(--mg-weight-label);
+    font-size: 1.5rem;
+    letter-spacing: 0.04em;
+  }
+  .mg-provisional {
+    font-weight: var(--mg-weight-label);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-muted);
+    border: 0.0625rem dashed var(--color-muted);
+    border-radius: var(--radius-pill);
+    padding: 0.25rem 0.625rem;
+  }
+</style>

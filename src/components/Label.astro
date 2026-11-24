@@ -1,0 +1,9 @@
+---
+interface Props {
+  as?: 'span' | 'p' | 'div' | 'h2' | 'h3' | 'dt';
+  class?: string;
+  id?: string;
+}
+const { as: Tag = 'span', class: className = '', id } = Astro.props;
+---
+<Tag id={id} class:list={['mg-label', className]}><slot /></Tag>

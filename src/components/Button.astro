@@ -1,0 +1,30 @@
+---
+interface Props {
+  href: string;
+  variant?: 'primary' | 'secondary';
+  /** Show a trailing arrow (used on links that move to another page). */
+  arrow?: boolean;
+  class?: string;
+}
+const { href, variant = 'primary', arrow = false, class: className = '' } = Astro.props;
+---
+<a href={href} class:list={['mg-btn', `mg-btn--${variant}`, className]}>
+  <slot />
+  {
+    arrow && (
+      <svg class="mg-arrow" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false">
+        <path d="M1 8h13M9 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.75" />
+      </svg>
+    )
+  }
+</a>
+
+<style>
+  .mg-arrow {
+    flex-shrink: 0;
+    transition: transform 0.15s ease;
+  }
+  a:hover .mg-arrow {
+    transform: translateX(0.1875rem);
+  }
+</style>

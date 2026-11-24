@@ -1,0 +1,26 @@
+---
+interface Props {
+  n: number;
+  title: string;
+  text?: string;
+  as?: 'div' | 'li' | 'article';
+  headingLevel?: 'h2' | 'h3';
+  class?: string;
+}
+const { n, title, text, as: Tag = 'div', headingLevel: H = 'h3', class: className = '' } = Astro.props;
+const number = String(n).padStart(2, '0');
+---
+<Tag class:list={['mg-numbered', className]}>
+  <span class="mg-num" aria-hidden="true">{number}</span>
+  <H class="mg-numbered__title">{title}</H>
+  {text && <p class="mg-body mt-3">{text}</p>}
+  <slot />
+</Tag>
+
+<style>
+  .mg-numbered__title {
+    font-size: clamp(1.25rem, 1.1rem + 0.5vw, 1.5rem);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+</style>

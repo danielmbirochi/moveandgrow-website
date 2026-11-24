@@ -1,0 +1,47 @@
+---
+import Label from './Label.astro';
+
+interface Props {
+  tone?: 'ground' | 'surface' | 'inverse';
+  label?: string;
+  heading?: string;
+  lead?: string;
+  /** id for the heading; generated from the heading when omitted. */
+  id?: string;
+  /** Narrower vertical padding. */
+  tight?: boolean;
+  class?: string;
+}
+const { tone = 'ground', label, heading, lead, id, tight = false, class: className = '' } = Astro.props;
+const slug = (s: string) =>
+  s
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '')
+    .slice(0, 48);
+const headingId = id ?? (heading ? slug(heading) : undefined);
+const toneClass = { ground: 'bg-ground', surface: 'bg-surface', inverse: 'mg-inverse' }[tone];
+---
+<section
+  class:list={[toneClass, tight ? 'py-14 md:py-20' : 'py-16 md:py-28', className]}
+  aria-labelledby={headingId}
+>
+  <div class="mg-container">
+    {
+      (label || heading || lead) && (
+        <header class="mb-10 max-w-3xl md:mb-14">
+          {label && <Label as="p">{label}</Label>}
+          {heading && (
+            <h2 id={headingId} class:list={{ 'mt-4': !!label }}>
+              {heading}
+            </h2>
+          )}
+          {lead && <p class="mg-lead mt-5 max-w-2xl">{lead}</p>}
+        </header>
+      )
+    }
+    <slot />
+  </div>
+</section>
