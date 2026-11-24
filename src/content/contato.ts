@@ -22,7 +22,6 @@ export default {
     whatsapp: 'WhatsApp',
     whatsappHint: 'Com DDD.',
     mensagem: 'O que você gostaria de melhorar?',
-    required: 'obrigatório',
     sendEmail: 'Enviar por e-mail',
     sendWhatsapp: 'Enviar por WhatsApp',
     howItWorks:

@@ -93,7 +93,6 @@ The spec's Services table gives some cells as instructions in English; these are
 - Lead: "Conte o que você usa hoje e o que gostaria de melhorar. A primeira conversa começa por aí."
 - Field labels: "Nome", "Empresa", "E-mail", "WhatsApp", "O que você gostaria de melhorar?" (from the spec); profile group legend "Você é" with "Sou agência" / "Sou empresa" (from the spec)
 - WhatsApp hint: "Com DDD."
-- Required marker (screen readers): "obrigatório"
 - Buttons: "Enviar por e-mail", "Enviar por WhatsApp"
 - How it works: "Ao enviar, abrimos o seu e-mail ou o WhatsApp com a mensagem pronta. Nada fica guardado neste site."
 - While contact details are placeholders: "Contato em configuração." and "O e-mail e o WhatsApp ainda estão sendo configurados. O formulário fica disponível assim que estiverem prontos."
