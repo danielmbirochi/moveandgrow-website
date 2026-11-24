@@ -102,3 +102,7 @@ The spec's Services table gives some cells as instructions in English; these are
 ## Theme adjustments
 
 None. Every colour pair in both themes passes the contrast test with the spec's values.
+
+## Share image
+
+`src/assets/og/<theme>.png` (rendered by `scripts/make-og.mjs`) shows the brand name, the Home label "Marketing + engenharia" and the approved Home headline. No new copy.

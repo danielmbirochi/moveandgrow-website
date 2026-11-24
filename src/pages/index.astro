@@ -34,7 +34,7 @@ const jsonLd = [organization(home.seo.description), ...services('all', '/')];
       {
         home.audiences.cards.map((c) => (
           <Card as="article" class="flex flex-col">
-            <Label as="h3">{c.label}</Label>
+            <Label as="h3" class="self-start">{c.label}</Label>
             <p class="mg-heading mt-5 mb-10 text-[1.625rem] md:text-[2rem]">{c.text}</p>
             <a href={c.href} class="mg-link mt-auto self-start">
               {c.link}

@@ -20,7 +20,7 @@ const { name, bio, initials, role, placeholder = false, placeholderNote } = Astr
     </div>
     {placeholder && placeholderNote && <span class="mg-provisional font-label">{placeholderNote}</span>}
   </div>
-  {role && <Label as="p" class="mt-8">{role}</Label>}
+  {role && <Label as="p" class="mt-8 self-start">{role}</Label>}
   <h3 class="mt-3 text-2xl">{name}</h3>
   <p class="mg-body mt-4">{bio}</p>
 </Card>
@@ -37,6 +37,9 @@ const { name, bio, initials, role, placeholder = false, placeholderNote } = Astr
     font-weight: var(--mg-weight-label);
     font-size: 1.5rem;
     letter-spacing: 0.04em;
+  }
+  :global([data-card='filled']) .mg-avatar {
+    background: var(--color-ground);
   }
   .mg-provisional {
     font-weight: var(--mg-weight-label);

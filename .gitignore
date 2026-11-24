@@ -6,3 +6,5 @@ src/styles/fonts.generated.css
 .lighthouse/
 *.log
 .DS_Store
+public/favicon.svg
+public/og-default.png

@@ -234,6 +234,13 @@
     background: var(--color-surface);
     border: 0.09375rem solid transparent;
   }
+  /* Filled cards on a surface section step up one level */
+  [data-card='filled'] .bg-surface .mg-card {
+    background: var(--color-surface-raised);
+  }
+  [data-label='pill'] .mg-card .mg-label {
+    background: var(--color-ground);
+  }
   .mg-card--placeholder {
     border-style: dashed !important;
     border-color: var(--color-muted) !important;
