@@ -21,7 +21,16 @@ describe('claude settings', () => {
 
   it('allows the workflow commands', () => {
     const allow: string[] = settings.permissions.allow;
-    for (const cmd of ['npm run verify', 'npm run og', 'npm install', 'gh pr create', 'git push']) {
+    for (const cmd of [
+      'npm run verify',
+      'npm run og',
+      'npm install',
+      'gh pr create',
+      'git push',
+      'npm run build',
+      'npm run preview',
+      'git remote get-url',
+    ]) {
       expect(allow.some((r) => r.includes(cmd)), cmd).toBe(true);
     }
   });

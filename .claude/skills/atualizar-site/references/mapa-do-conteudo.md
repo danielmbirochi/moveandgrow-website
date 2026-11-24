@@ -37,7 +37,7 @@ Every page also has `seo.title` (the name in the browser tab and on Google) and 
 | a etiqueta pequena acima do título | `src/content/empresas.ts` | `hero.label` |
 | o título grande no topo da página | `src/content/empresas.ts` | `hero.headline` (texto aprovado) |
 | o parágrafo abaixo do título | `src/content/empresas.ts` | `hero.lead` |
-| a seção do diagnóstico ("Você não precisa começar do zero...") | `src/content/empresas.ts` | `diagnostic.label`, `diagnostic.heading`, `diagnostic.point.title` / `.text`, `diagnostic.link` |
+| a seção do diagnóstico ("Você não precisa começar do zero...") | `src/content/empresas.ts` | `diagnostic.label`, `diagnostic.heading` (texto aprovado), `diagnostic.point.title` / `.text`, `diagnostic.link` |
 | "Como funciona" e os três itens | `src/content/empresas.ts` | `system.label`, `system.heading`, `system.items[i].title` / `.text` |
 | o título acima da tabela de ofertas | `src/content/empresas.ts` | `offers.label`, `offers.heading` |
 | o chamado final no rodapé da página | `src/content/empresas.ts` | `cta.heading`, `cta.text` |
@@ -107,12 +107,13 @@ The sentence "Em duas semanas, você recebe o mapa da sua operação..." is repe
 
 ## Texto aprovado
 
-Pinned verbatim in `tests/content.test.ts`. Changing one means changing the copy and its pinned string together, and the PR body starts with "**Texto aprovado alterado**".
+Protected by `tests/content.test.ts`. Changing one means changing the copy and its test expectation together, and the PR body starts with "**Texto aprovado alterado**".
 
 - Home `hero.headline` in `src/content/home.ts` (pinned in `tests/content.test.ts`)
 - Para agências `hero.headline` in `src/content/agencias.ts` (pinned in `tests/content.test.ts`)
 - Para empresas `hero.headline` in `src/content/empresas.ts` (pinned in `tests/content.test.ts`)
 - The engineering bio, `founders[0].bio` in `src/content/sobre.ts` (pinned in `tests/content.test.ts` as `ENGINEERING_BIO`)
+- Para empresas `diagnostic.heading` in `src/content/empresas.ts`: not pinned word for word, but it holds the site's only "do zero" and the test counts it. If a change removes the phrase, the expected count in `tests/content.test.ts` goes from 1 to 0 in the same change.
 
 ## Ainda por preencher
 
