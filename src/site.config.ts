@@ -4,7 +4,7 @@
  * "Contato em configuração." instead of emitting broken links.
  */
 export const site = {
-  url: 'https://example.com',
+  url: 'https://moveandgrow.com.br',
   email: '[EMAIL]',
   whatsapp: '[WHATSAPP]',
   nav: [
