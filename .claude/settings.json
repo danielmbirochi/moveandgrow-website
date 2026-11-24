@@ -1,7 +1,7 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npm install:*)",
+      "Bash(npm install)",
       "Bash(npm run verify:*)",
       "Bash(npm run og:*)",
       "Bash(npm run dev:*)",
@@ -16,9 +16,21 @@
       "Bash(git add:*)",
       "Bash(git commit:*)",
       "Bash(git push -u origin conteudo/*)",
+      "Bash(git restore src/site.config.ts)",
+      "Bash(git restore src/content/agencias.ts)",
+      "Bash(git restore src/content/commitments.ts)",
+      "Bash(git restore src/content/contato.ts)",
+      "Bash(git restore src/content/empresas.ts)",
+      "Bash(git restore src/content/home.ts)",
+      "Bash(git restore src/content/mapa.ts)",
+      "Bash(git restore src/content/offers.ts)",
+      "Bash(git restore src/content/shell.ts)",
+      "Bash(git restore src/content/sobre.ts)",
       "Bash(gh pr create:*)",
       "Bash(gh pr view:*)",
-      "Bash(gh auth status:*)"
+      "Bash(gh api repos/*/pulls -f *)",
+      "Edit(/src/content/**)",
+      "Edit(/src/site.config.ts)"
     ],
     "deny": [
       "Bash(git push * main)",
@@ -38,7 +50,16 @@
       "Bash(git push * -f *)",
       "Bash(git push * +*)",
       "Bash(git push *--mirror*)",
-      "Bash(git push *--all*)"
+      "Bash(git push *--all*)",
+      "Bash(git switch -f *)",
+      "Bash(git switch * -f)",
+      "Bash(git switch * -f *)",
+      "Bash(git switch *--force*)",
+      "Bash(git switch *--discard-changes*)",
+      "Bash(gh pr merge*)",
+      "Bash(gh api */merge*)",
+      "Bash(gh api graphql*merge*)",
+      "Bash(gh api graphql*Merge*)"
     ]
   }
 }

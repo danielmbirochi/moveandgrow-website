@@ -1,7 +1,36 @@
 import { describe, it, expect } from 'vitest';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
+import { dirname, posix } from 'node:path';
 
 const read = (p: string) => readFileSync(new URL(`../${p}`, import.meta.url), 'utf8');
+const exists = (p: string) => existsSync(new URL(`../${p}`, import.meta.url));
+
+// Repo paths cited in backticks in a prose file, including inside a command. Globs, placeholders and URLs
+// are skipped, and so are gitignored (generated) paths, which a fresh clone
+// does not have. A bare file name may be relative to the citing file, to the
+// repo root, or a content module (`home.ts`).
+const rootDirs = new Set(
+  readdirSync(new URL('../', import.meta.url), { withFileTypes: true })
+    .filter((d) => d.isDirectory())
+    .map((d) => d.name),
+);
+const ignored = read('.gitignore').split('\n').map((l) => l.trim()).filter(Boolean);
+function citedPaths(file: string): { path: string; found: boolean }[] {
+  const here = dirname(file);
+  return [...read(file).matchAll(/`([^`\n]+)`/g)]
+    .flatMap((m) => m[1].split(/\s+/))
+    .filter((p) => !/[*<>{}]|:\/\//.test(p) && !p.startsWith('/'))
+    .filter((p) =>
+      p.includes('/')
+        ? rootDirs.has(p.split('/')[0]) || exists(posix.join(here, p.split('/')[0]))
+        : /^[\w.-]+\.(?:ts|mjs|js|json|md)$/.test(p),
+    )
+    .filter((p) => !ignored.includes(p))
+    .map((p) => ({
+      path: p,
+      found: [p, posix.join(here, p), `src/content/${p}`].some(exists),
+    }));
+}
 
 describe('claude settings', () => {
   const settings = JSON.parse(read('.claude/settings.json'));
@@ -24,14 +53,47 @@ describe('claude settings', () => {
     for (const cmd of [
       'npm run verify',
       'npm run og',
-      'npm install',
       'gh pr create',
+      'gh api repos/*/pulls',
       'git push',
       'npm run build',
       'npm run preview',
       'git remote get-url',
+      'git restore src/site.config.ts',
     ]) {
       expect(allow.some((r) => r.includes(cmd)), cmd).toBe(true);
+    }
+  });
+
+  it('allows only the bare npm install, not installing packages', () => {
+    const installs = (settings.permissions.allow as string[]).filter((r) => r.includes('npm install'));
+    expect(installs).toEqual(['Bash(npm install)']);
+  });
+
+  it('allows git restore only for single named copy files', () => {
+    const restores = (settings.permissions.allow as string[]).filter((r) => r.includes('git restore'));
+    expect(restores.length).toBeGreaterThan(0);
+    for (const rule of restores) {
+      expect(rule, rule).toMatch(/^Bash\(git restore (?:src\/content\/[\w-]+\.ts|src\/site\.config\.ts)\)$/);
+      expect(exists(rule.slice('Bash(git restore '.length, -1)), rule).toBe(true);
+    }
+  });
+
+  it('pre-approves edits to the copy files and nothing else', () => {
+    const edits = (settings.permissions.allow as string[]).filter((r) => r.startsWith('Edit('));
+    expect(edits.sort()).toEqual(['Edit(/src/content/**)', 'Edit(/src/site.config.ts)']);
+  });
+
+  it('denies merging and discarding uncommitted work', () => {
+    const deny: string[] = settings.permissions.deny;
+    for (const rule of [
+      'Bash(gh pr merge*)',
+      'Bash(gh api */merge*)',
+      'Bash(git switch -f *)',
+      'Bash(git switch *--force*)',
+      'Bash(git switch *--discard-changes*)',
+    ]) {
+      expect(deny, rule).toContain(rule);
     }
   });
 });
@@ -55,9 +117,21 @@ describe('content map', () => {
   });
 
   it('only points at files that exist', () => {
-    const paths = [...map.matchAll(/`((?:src|tests|docs)\/[^`\s]+\.\w+)`/g)].map((m) => m[1]);
+    const paths = citedPaths('.claude/skills/atualizar-site/references/mapa-do-conteudo.md');
     expect(paths.length).toBeGreaterThan(5);
-    for (const p of paths) expect(existsSync(new URL(`../${p}`, import.meta.url)), p).toBe(true);
+    for (const { path, found } of paths) expect(found, path).toBe(true);
+  });
+});
+
+describe('prose that cites repo paths', () => {
+  it.each([
+    '.claude/skills/atualizar-site/SKILL.md',
+    '.claude/skills/atualizar-site/references/voz.md',
+    'CLAUDE.md',
+  ])('%s only points at paths that exist', (file) => {
+    const paths = citedPaths(file);
+    expect(paths.length).toBeGreaterThan(2);
+    for (const { path, found } of paths) expect(found, path).toBe(true);
   });
 });
 

@@ -1,6 +1,6 @@
 # Voz do site
 
-How the site's copy sounds, and how to explain a rule to the person when their wording breaks it. `tests/content.test.ts` is the enforced list: `npm run verify` fails when copy breaks a rule below. This file explains those rules; if the two ever disagree, the test wins. Never change the test to let a wording through. The only exception is the approved texts listed in `mapa-do-conteudo.md` (including the "do zero" count tied to the Para empresas diagnostic heading): updating their expectation together with the copy is not loosening a rule.
+How the site's copy sounds, and how to explain a rule to the person when their wording breaks it. `tests/content.test.ts` is the enforced list: `npm run verify` fails when copy breaks a rule below. It only scans the content modules it imports from `src/content/`, so `src/site.config.ts` (the menu labels) is not checked for avoided terms, prices or the brand name; check a new menu label against this file yourself. This file explains those rules; if the two ever disagree, the test wins. Never change the test to let a wording through. The only exception is the approved texts listed in `mapa-do-conteudo.md` (including the "do zero" count tied to the Para empresas diagnostic heading): updating their expectation together with the copy is not loosening a rule.
 
 For each rule, the line in Portuguese is what to tell the person, followed by a suggested rewording.
 

@@ -8,3 +8,4 @@ src/styles/fonts.generated.css
 .DS_Store
 public/favicon.svg
 public/og-default.png
+.screenshots/

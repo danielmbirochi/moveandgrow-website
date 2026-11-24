@@ -65,6 +65,13 @@ How it works: `astro.config.mjs` resolves the active theme and writes
 | Components | `src/components/` |
 | Content updates through Claude | `.claude/skills/atualizar-site/` (rules in `CLAUDE.md`) |
 
+Before anyone uses the content skill, turn on a branch protection rule or
+ruleset in GitHub that requires a pull request to change `main`. That rule is
+the real enforcement: `.claude/settings.json` only pre-approves the skill's
+commands and blocks the usual ways of pushing to `main` or merging, which is a
+best-effort convenience, not a security boundary, and the GitHub connection
+used by Claude Code on the web does not limit which branches a push can update.
+
 ## Placeholders still to fill
 
 - `src/site.config.ts`: `url` is `https://example.com`; `email` is `[EMAIL]`;

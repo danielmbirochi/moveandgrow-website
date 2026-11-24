@@ -73,8 +73,8 @@ Every page also has `seo.title` (the name in the browser tab and on Google) and 
 | O que a pessoa vê | Arquivo | Campo |
 | --- | --- | --- |
 | a etiqueta, o título e o parágrafo no topo | `src/content/contato.ts` | `hero.label`, `hero.headline`, `hero.lead` |
-| os nomes dos campos do formulário | `src/content/contato.ts` | `form.nome`, `form.empresa`, `form.email`, `form.whatsapp`, `form.mensagem` |
-| a pergunta "Você é" e as opções | `src/content/contato.ts` | `form.perfilLegend`, `form.perfil.agencia`, `form.perfil.empresa` |
+| os nomes dos campos do formulário | `src/content/contato.ts` | `form.nome`, `form.empresa`, `form.email`, `form.whatsapp`, `form.mensagem` (also label each line of the message that is sent) |
+| a pergunta "Você é" e as opções | `src/content/contato.ts` | `form.perfilLegend`, `form.perfil.agencia`, `form.perfil.empresa` (the chosen option also goes into the message that is sent) |
 | a dica abaixo do WhatsApp ("Com DDD.") | `src/content/contato.ts` | `form.whatsappHint` |
 | os botões de envio | `src/content/contato.ts` | `form.sendEmail`, `form.sendWhatsapp` |
 | a explicação de como o envio funciona | `src/content/contato.ts` | `form.howItWorks` |
@@ -86,7 +86,7 @@ Every page also has `seo.title` (the name in the browser tab and on Google) and 
 | O que a pessoa vê | Arquivo | Campo |
 | --- | --- | --- |
 | o botão laranja "Mapear minha operação" (topo e chamados finais) | `src/content/shell.ts` | `cta` |
-| os links do menu | `src/site.config.ts` | `site.nav[i].label` (leave `href` alone) |
+| os links do menu (also the "Páginas" list in the footer) | `src/site.config.ts` | `site.nav[i].label` (leave `href` alone) |
 | o botão do menu no celular | `src/content/shell.ts` | `menu`, `menuClose` |
 | a frase do rodapé | `src/content/shell.ts` | `footer.tagline` |
 | os títulos das colunas do rodapé ("Páginas", "Contato") | `src/content/shell.ts` | `footer.pages`, `footer.contact` |
@@ -99,11 +99,22 @@ Every page also has `seo.title` (the name in the browser tab and on Google) and 
 | os títulos das colunas e a nota abaixo da tabela | `src/content/offers.ts` | `offerTableCopy.offer`, `.covers`, `.agencies`, `.companies`, `.notOffered`, `.campaignsNote` |
 | os três compromissos (Home completa, Sobre curta) | `src/content/commitments.ts` | `commitments[i].title`, `.text`, `.short` |
 
-Text read only by screen readers: `shell.skipLink`, `shell.homeLink`, `shell.mainNav`, `shell.breadcrumbRoot`, `offerTableCopy.caption`.
+Text read only by screen readers: `shell.skipLink`, `shell.homeLink`, `shell.mainNav`, `offerTableCopy.caption`.
+
+`shell.breadcrumbRoot` ("Início") is not on the page at all: like `breadcrumb`, it only appears in Google's results.
 
 The brand name is not in any of these files. It lives in `visual-identity.config.ts` and is out of scope for copy changes.
 
-The sentence "Em duas semanas, você recebe o mapa da sua operação..." is repeated in `home.ts` (`mapa.text`), `mapa.ts` (`hero.lead`), `agencias.ts` and `empresas.ts` (`cta.text`). When the person changes it, ask whether to change it everywhere.
+## Texto repetido
+
+Some text appears in more than one place. These are known examples, not a complete list: before editing, search `src/content/` and `src/site.config.ts` for the exact old text, and ask the person about every other place it appears.
+
+- "Em duas semanas, você recebe o mapa da sua operação..." in `home.ts` (`mapa.text`), `mapa.ts` (`hero.lead`), `agencias.ts` and `empresas.ts` (`cta.text`).
+- The Para empresas headline (`hero.headline` in `empresas.ts`, texto aprovado) is also the Home card `audiences.cards[1].text` in `home.ts`.
+- "Três regras que valem para qualquer projeto." is `commitments.heading` in `home.ts` and in `sobre.ts`.
+- "Marketing e engenharia no mesmo time." is `footer.tagline` in `shell.ts` and `hero.headline` in `sobre.ts`; it also opens `hero.lead` and `seo.description` in `home.ts`.
+- "Comece pelo Mapa da Operação." is `cta.heading` in `agencias.ts` and in `empresas.ts`.
+- "Vamos mapear a sua operação." is `cta.heading` in `mapa.ts` and `hero.headline` in `contato.ts`.
 
 ## Texto aprovado
 
@@ -117,13 +128,13 @@ Protected by `tests/content.test.ts`. Changing one means changing the copy and i
 
 ## Ainda por preencher
 
-Placeholders waiting for real values:
+A bracketed value such as `[EMAIL]`, or `https://example.com` for the address, means not filled yet. This list was true when it was written and goes stale after the first fill, so check the file itself rather than trusting it. Placeholders waiting for real values:
 
 - `site.url` in `src/site.config.ts`: `https://example.com`
 - `site.email` in `src/site.config.ts`: `[EMAIL]`
 - `site.whatsapp` in `src/site.config.ts`: `[WHATSAPP]`
 - In `src/content/sobre.ts`, the marketing founder (`founders[1]`): `name` (`[Nome]`), `bio` (contains `[Cargo e resultados a confirmar.]`), `initials` (`[N]`), and the `placeholder: true` flag. Remove the flag once name and bio are real; it is what shows the "Texto provisório" badge.
 
-A bracketed value counts as not filled. With neither email nor WhatsApp filled, the footer shows "Contato em configuração." and the contact form stays disabled; filling either one turns them on for that channel.
+With neither email nor WhatsApp filled, the footer shows "Contato em configuração." and the contact form stays disabled; filling either one turns them on for that channel.
 
 The content files are the source of truth. If this map disagrees with them, follow the files.
