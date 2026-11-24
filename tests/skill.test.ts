@@ -62,3 +62,22 @@ describe('voice reference', () => {
     for (const t of terms) expect(voz, t).toContain(t.toLowerCase());
   });
 });
+
+describe('skill', () => {
+  const skill = read('.claude/skills/atualizar-site/SKILL.md');
+
+  it('has matching frontmatter and a description', () => {
+    expect(skill).toMatch(/^---\nname: atualizar-site\ndescription: .{80,}\n/);
+  });
+
+  it('links both references and carries the fixed strings', () => {
+    for (const s of [
+      'references/mapa-do-conteudo.md',
+      'references/voz.md',
+      'conteudo/',
+      '**Texto aprovado alterado**',
+      'npm run verify',
+      'npm run og',
+    ]) expect(skill, s).toContain(s);
+  });
+});
