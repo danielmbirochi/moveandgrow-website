@@ -63,6 +63,7 @@ How it works: `astro.config.mjs` resolves the active theme and writes
 | Themes | `src/themes/` |
 | Pages | `src/pages/` |
 | Components | `src/components/` |
+| Content updates through Claude | `.claude/skills/atualizar-site/` (rules in `CLAUDE.md`) |
 
 ## Placeholders still to fill
 
