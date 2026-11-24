@@ -1,5 +1,7 @@
 ---
 import { brand } from '../../visual-identity.config';
+import source from '../assets/logo.svg?raw';
+import { paintLogo } from '../lib/logo';
 
 interface Props {
   /** Draw for an inverse (dark in oficina) background. */
@@ -7,16 +9,14 @@ interface Props {
   class?: string;
 }
 const { inverse = false, class: className = '' } = Astro.props;
+
+// Inlined so the ink follows the text colour and the accent follows the theme.
+// The visible name comes from the sr-only text, so the SVG's own title goes.
+const svg = paintLogo(source, 'currentColor', 'var(--color-accent)')
+  .replace(/\s*<title>.*?<\/title>/, '')
+  .replace('<svg ', '<svg class="h-8 w-auto sm:h-9" aria-hidden="true" ');
 ---
-<span class:list={['inline-flex items-center gap-3', className]}>
-  <span
-    aria-hidden="true"
-    class:list={[
-      'relative inline-block size-7 shrink-0 overflow-hidden rounded-control',
-      inverse ? 'bg-inverse-ink' : 'bg-ink',
-    ]}
-  >
-    <span class="absolute right-0 bottom-0 size-3 bg-accent"></span>
-  </span>
-  <span class="mg-heading text-xl leading-none tracking-tight whitespace-nowrap">{brand.name}</span>
+<span class:list={['inline-flex', inverse ? 'text-inverse-ink' : 'text-ink', className]}>
+  <Fragment set:html={svg} />
+  <span class="sr-only">{brand.name}</span>
 </span>

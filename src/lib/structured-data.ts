@@ -13,7 +13,7 @@ export function organization(description: string): Record<string, unknown> {
     name: brand.name,
     alternateName: brand.shortName,
     url: abs('/'),
-    logo: abs('/favicon.svg'),
+    logo: abs('/logo.svg'),
     description,
     areaServed: 'BR',
     knowsLanguage: 'pt-BR',

@@ -6,6 +6,7 @@ import tailwindcss from '@tailwindcss/vite';
 import sitemap from '@astrojs/sitemap';
 import { resolveTheme, themeToCss, themeFontImports } from './src/themes/index.ts';
 import { site } from './src/site.config.ts';
+import { paintLogo, logoMark, LOGO_MARK_WIDTH, LOGO_HEIGHT } from './src/lib/logo.ts';
 
 // The active theme (visual-identity.config.ts, or MG_THEME) becomes two CSS
 // files before Vite starts: Tailwind tokens, and the theme's own fonts only.
@@ -23,16 +24,21 @@ writeIfChanged(
     '\n',
 );
 
-// Theme-dependent public files: the favicon (the wordmark's mark) and the
-// share image rendered per theme by scripts/make-og.mjs.
+// Theme-dependent public files, all drawn from src/assets/logo.svg: the
+// favicon (the logo's mark on a ground tile) and the full logo for structured
+// data. The share image is rendered per theme by scripts/make-og.mjs.
 mkdirSync(fileURLToPath(new URL('./public/', import.meta.url)), { recursive: true });
 const c = theme.colors;
+const logo = paintLogo(readFileSync(new URL('./src/assets/logo.svg', import.meta.url), 'utf8'), c.ink, c.accent);
+const tile = LOGO_MARK_WIDTH + 128;
+const tileTop = (LOGO_HEIGHT - tile) / 2;
 writeIfChanged(
   './public/favicon.svg',
-  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28">` +
-    `<rect width="28" height="28" rx="${parseFloat(theme.radii.control) > 4 ? 6 : 2}" fill="${c.ink}"/>` +
-    `<rect x="16" y="16" width="12" height="12" fill="${c.accent}"/></svg>\n`,
+  `<svg xmlns="http://www.w3.org/2000/svg" viewBox="-64 ${tileTop} ${tile} ${tile}">` +
+    `<rect x="-64" y="${tileTop}" width="${tile}" height="${tile}" rx="${parseFloat(theme.radii.control) > 4 ? 150 : 50}" fill="${c.ground}"/>` +
+    `${logoMark(logo)}</svg>\n`,
 );
+writeIfChanged('./public/logo.svg', logo);
 const ogSource = fileURLToPath(new URL(`./src/assets/og/${theme.name}.png`, import.meta.url));
 if (!existsSync(ogSource)) throw new Error(`Missing share image ${ogSource}. Run npm run og.`);
 copyFileSync(ogSource, fileURLToPath(new URL('./public/og-default.png', import.meta.url)));

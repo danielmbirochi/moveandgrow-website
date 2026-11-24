@@ -7,5 +7,6 @@ src/styles/fonts.generated.css
 *.log
 .DS_Store
 public/favicon.svg
+public/logo.svg
 public/og-default.png
 .screenshots/
