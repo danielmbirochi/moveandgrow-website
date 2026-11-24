@@ -81,6 +81,15 @@ Every page also has `seo.title` (the name in the browser tab and on Google) and 
 | o aviso enquanto o contato não está pronto | `src/content/contato.ts` | `form.notConfigured`, `form.notConfiguredDetail` |
 | o assunto, a primeira linha e o rótulo "Perfil" da mensagem que chega por e-mail ou WhatsApp | `src/content/contato.ts` | `form.subject`, `form.briefIntro`, `form.perfilLabel` |
 
+## Página não encontrada (erro 404)
+
+Shown for any address that does not exist on the site.
+
+| O que a pessoa vê | Arquivo | Campo |
+| --- | --- | --- |
+| a etiqueta "Erro 404", o título e o parágrafo | `src/content/not-found.ts` | `hero.label`, `hero.headline`, `hero.lead` |
+| os dois links ("Voltar para o início", "Ir para o contato") | `src/content/not-found.ts` | `links.home`, `links.contact` |
+
 ## Em todas as páginas
 
 | O que a pessoa vê | Arquivo | Campo |
@@ -94,7 +103,6 @@ Every page also has `seo.title` (the name in the browser tab and on Google) and 
 | as palavras "E-mail:" e "WhatsApp:" antes dos contatos no rodapé | `src/content/shell.ts` | `footer.email`, `footer.whatsapp` |
 | o aviso "Contato em configuração." no rodapé | `src/content/shell.ts` | `footer.notConfigured` |
 | o e-mail e o WhatsApp (rodapé e formulário) | `src/site.config.ts` | `site.email`, `site.whatsapp` |
-| o endereço do site | `src/site.config.ts` | `site.url` |
 | as quatro ofertas da tabela (Home, Para agências, Para empresas) | `src/content/offers.ts` | `offers[i].name`, `.covers`, `.agencies`, `.companies` (`null` = "Não oferecido"; leave `id` alone) |
 | os títulos das colunas e a nota abaixo da tabela | `src/content/offers.ts` | `offerTableCopy.offer`, `.covers`, `.agencies`, `.companies`, `.notOffered`, `.campaignsNote` |
 | os três compromissos (Home completa, Sobre curta) | `src/content/commitments.ts` | `commitments[i].title`, `.text`, `.short` |
@@ -102,6 +110,8 @@ Every page also has `seo.title` (the name in the browser tab and on Google) and 
 Text read only by screen readers: `shell.skipLink`, `shell.homeLink`, `shell.mainNav`, `offerTableCopy.caption`.
 
 `shell.breadcrumbRoot` ("Início") is not on the page at all: like `breadcrumb`, it only appears in Google's results.
+
+`site.url` in `src/site.config.ts` is the site's live address, not copy. The sitemap, `robots.txt` and the page addresses given to Google and to shared links are built from it, so it is out of scope: changing it is a maintainer's decision.
 
 The brand name is not in any of these files. It lives in `visual-identity.config.ts` and is out of scope for copy changes.
 
@@ -128,9 +138,8 @@ Protected by `tests/content.test.ts`. Changing one means changing the copy and i
 
 ## Ainda por preencher
 
-A bracketed value such as `[EMAIL]`, or `https://example.com` for the address, means not filled yet. This list was true when it was written and goes stale after the first fill, so check the file itself rather than trusting it. Placeholders waiting for real values:
+A bracketed value such as `[EMAIL]` means not filled yet. This list was true when it was written and goes stale after the first fill, so check the file itself rather than trusting it. Placeholders waiting for real values:
 
-- `site.url` in `src/site.config.ts`: `https://example.com`
 - `site.email` in `src/site.config.ts`: `[EMAIL]`
 - `site.whatsapp` in `src/site.config.ts`: `[WHATSAPP]`
 - In `src/content/sobre.ts`, the marketing founder (`founders[1]`): `name` (`[Nome]`), `bio` (contains `[Cargo e resultados a confirmar.]`), `initials` (`[N]`), and the `placeholder: true` flag. Remove the flag once name and bio are real; it is what shows the "Texto provisório" badge.
