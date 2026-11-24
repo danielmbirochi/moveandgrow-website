@@ -5,11 +5,12 @@ import empresas from '../src/content/empresas';
 import mapa from '../src/content/mapa';
 import sobre from '../src/content/sobre';
 import contato from '../src/content/contato';
+import notFound from '../src/content/not-found';
 import { offers, offerTableCopy } from '../src/content/offers';
 import { commitments } from '../src/content/commitments';
 import shell from '../src/content/shell';
 
-const pages = { home, agencias, empresas, mapa, sobre, contato };
+const pages = { home, agencias, empresas, mapa, sobre, contato, notFound };
 const modules = { ...pages, offers, offerTableCopy, commitments, shell };
 
 function strings(value: unknown): string[] {

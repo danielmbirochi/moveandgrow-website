@@ -66,8 +66,8 @@ How it works: `astro.config.mjs` resolves the active theme and writes
 
 ## Placeholders still to fill
 
-- `src/site.config.ts`: `url` is `https://example.com`; `email` is `[EMAIL]`;
-  `whatsapp` is `[WHATSAPP]`. While the contact details are placeholders the
+- `src/site.config.ts`: `email` is `[EMAIL]`; `whatsapp` is `[WHATSAPP]`.
+  While the contact details are placeholders the
   form is disabled and the site shows "Contato em configuração." instead of
   any `mailto:` or WhatsApp link. Once set, the form opens the visitor's e-mail
   (works without JavaScript) or WhatsApp with the brief pre-filled.
