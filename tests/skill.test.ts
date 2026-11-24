@@ -104,6 +104,12 @@ describe('CLAUDE.md', () => {
     expect(text).toContain('pull request');
     expect(text).toContain('atualizar-site');
   });
+
+  it('says that merging publishes and points at the README', () => {
+    const text = read('CLAUDE.md');
+    expect(text).toContain('Merging into `main` publishes');
+    expect(text).toContain('README.md');
+  });
 });
 
 describe('content map', () => {
@@ -121,10 +127,17 @@ describe('content map', () => {
     expect(paths.length).toBeGreaterThan(5);
     for (const { path, found } of paths) expect(found, path).toBe(true);
   });
+
+  it('keeps the site address out of the editable fields and the placeholders', () => {
+    expect(map).not.toMatch(/\|\s*`site\.url`\s*\|/);
+    expect(map).not.toContain('example.com');
+    expect(map).toMatch(/`site\.url`[^\n]*out of scope/);
+  });
 });
 
 describe('prose that cites repo paths', () => {
   it.each([
+    'README.md',
     '.claude/skills/atualizar-site/SKILL.md',
     '.claude/skills/atualizar-site/references/voz.md',
     'CLAUDE.md',
@@ -161,6 +174,21 @@ describe('skill', () => {
       '**Texto aprovado alterado**',
       'npm run verify',
       'npm run og',
+    ]) expect(skill, s).toContain(s);
+  });
+
+  it('does not offer to change the site address', () => {
+    const description = skill.split('\n')[2];
+    expect(description).toMatch(/^description: /);
+    expect(description).not.toMatch(/site URL/i);
+    expect(skill).toMatch(/`site\.url`[^\n]*out of scope/);
+  });
+
+  it('tells the person about the preview link and what follows approval', () => {
+    for (const s of [
+      'Branch Preview URL',
+      'Never build it from the branch name',
+      'a mudança entra no site sozinha',
     ]) expect(skill, s).toContain(s);
   });
 });

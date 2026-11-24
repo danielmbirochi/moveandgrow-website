@@ -65,12 +65,54 @@ How it works: `astro.config.mjs` resolves the active theme and writes
 | Components | `src/components/` |
 | Content updates through Claude | `.claude/skills/atualizar-site/` (rules in `CLAUDE.md`) |
 
-Before anyone uses the content skill, turn on a branch protection rule or
-ruleset in GitHub that requires a pull request to change `main`. That rule is
-the real enforcement: `.claude/settings.json` only pre-approves the skill's
-commands and blocks the usual ways of pushing to `main` or merging, which is a
-best-effort convenience, not a security boundary, and the GitHub connection
-used by Claude Code on the web does not limit which branches a push can update.
+## Hosting and deploy
+
+The site is hosted on Cloudflare Pages, project `moveandgrow-website`,
+connected to this repository through the "Cloudflare Workers and Pages" GitHub
+app (installed for this repository only). There is no deploy workflow and no
+deploy command here: Cloudflare builds on its side.
+
+- Production: every commit that lands on `main`, which means every merged pull
+  request, is built and published at https://moveandgrow.com.br, usually within
+  a minute or two. `www.moveandgrow.com.br` and
+  `moveandgrow-website.pages.dev` serve the same build. Merging is publishing.
+- Previews: every pushed branch other than `main` gets its own preview
+  deployment. On a pull request Cloudflare adds a check named "Cloudflare
+  Pages" and a comment from `cloudflare-workers-and-pages` with a per-commit
+  "Preview URL" (`https://<hash>.moveandgrow-website.pages.dev`) and a "Branch
+  Preview URL" that follows the branch. For the branch `fix/site-url-and-404`
+  it was `https://fix-site-url-and-404.moveandgrow-website.pages.dev`. Copy
+  the address from the comment instead of building it from the branch name:
+  Cloudflare rewrites the name and may shorten a long one. Previews are public
+  addresses served with `X-Robots-Tag: noindex`.
+- Build settings live in the Cloudflare dashboard, not in this repository:
+  build command `npm run build`, output directory `dist`, environment variable
+  `NODE_VERSION=24`, no framework preset. A change to how the site builds may
+  need a change there too.
+- What is published: only what Astro writes to `dist/`, which is the pages in
+  `src/pages/`, the files in `public/` and the bundled assets. `README.md`,
+  `CLAUDE.md`, `.claude/`, `docs/`, `tests/`, `scripts/` and the config files
+  are never published. `scripts/check-dist.mjs` (part of `npm run verify`)
+  checks the build output. `src/pages/404.astro` is there so that Cloudflare
+  answers an unknown address with a real 404 instead of the home page.
+- Site address: `site.url` in `src/site.config.ts` is the production domain.
+  The sitemap, `robots.txt` and the canonical and share tags are built from
+  it, on previews as well, so change it only if the domain changes.
+- DNS for moveandgrow.com.br is managed in Cloudflare. The domain is
+  registered through Locaweb, with its nameservers pointing at Cloudflare.
+  Cloudflare's "Bot Preference Sync" is off, so the `robots.txt` this
+  repository builds is the only one.
+- `main` is protected by a GitHub ruleset: changes reach it only through a
+  pull request with one approving review, and force pushes and deletion are
+  blocked. Only the repository owner (admin) can bypass it; the other
+  collaborator with write access always goes through a pull request the owner
+  approves.
+
+That ruleset is the real enforcement for the content skill.
+`.claude/settings.json` only pre-approves the skill's commands and blocks the
+usual ways of pushing to `main` or merging, which is a best-effort
+convenience, not a security boundary, and the GitHub connection used by Claude
+Code on the web does not limit which branches a push can update.
 
 ## Placeholders still to fill
 
