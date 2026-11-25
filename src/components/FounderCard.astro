@@ -1,23 +1,39 @@
 ---
 import Card from './Card.astro';
 import Label from './Label.astro';
+import { Image } from 'astro:assets';
+import { founderPhotos, type FounderPhoto } from '../lib/founder-photos';
 
 interface Props {
   name: string;
   bio: string;
   initials: string;
   role?: string;
+  photo?: FounderPhoto;
   /** Marks the card as provisional text still to be confirmed. */
   placeholder?: boolean;
   placeholderNote?: string;
 }
-const { name, bio, initials, role, placeholder = false, placeholderNote } = Astro.props;
+const { name, bio, initials, role, photo, placeholder = false, placeholderNote } = Astro.props;
 ---
 <Card as="article" placeholder={placeholder} class="flex h-full flex-col">
   <div class="flex items-start justify-between gap-4">
-    <div class="mg-avatar font-label" aria-hidden="true">
-      <span>{initials}</span>
-    </div>
+    {
+      photo ? (
+        <Image
+          src={founderPhotos[photo]}
+          alt={name}
+          width={224}
+          height={224}
+          densities={[1, 2]}
+          class="mg-avatar mg-avatar-photo"
+        />
+      ) : (
+        <div class="mg-avatar font-label" aria-hidden="true">
+          <span>{initials}</span>
+        </div>
+      )
+    }
     {placeholder && placeholderNote && <span class="mg-provisional font-label">{placeholderNote}</span>}
   </div>
   {role && <Label as="p" class="mt-8 self-start">{role}</Label>}
@@ -37,6 +53,11 @@ const { name, bio, initials, role, placeholder = false, placeholderNote } = Astr
     font-weight: var(--mg-weight-label);
     font-size: 1.5rem;
     letter-spacing: 0.04em;
+  }
+  .mg-avatar-photo {
+    width: 7rem;
+    height: 7rem;
+    object-fit: cover;
   }
   :global([data-card='filled']) .mg-avatar {
     background: var(--color-ground);

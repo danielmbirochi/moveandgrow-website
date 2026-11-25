@@ -124,7 +124,6 @@ Code on the web does not limit which branches a push can update.
 - `src/content/sobre.ts`: the marketing founder's name (`[Nome]`), bio
   (`[Cargo e resultados a confirmar.]`) and initials. The card is marked
   "Texto provisório" until `placeholder: true` is removed.
-- Founder photos: initials only.
 - Logo: `src/assets/logo.svg` is the single source. `src/components/Wordmark.astro`,
   the favicon, `public/logo.svg` and the share image repaint it in theme
   colours (`src/lib/logo.ts`).
