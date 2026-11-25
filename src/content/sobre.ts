@@ -30,17 +30,16 @@ export default {
   },
   founders: [
     {
-      role: 'Engenharia',
-      name: 'Daniel Miranda Birochi',
-      bio: 'Daniel Miranda Birochi. Há 10 anos constrói sistemas financeiros de missão crítica, onde um erro custa caro e parar não é opção. Projeta agentes de IA desde 2024 e já liderou arquitetura de agentes que operam em produção, todos os dias. Passou por grandes empresas de tecnologia, como a Binance. Começou a carreira ao lado do cliente, como engenheiro alocado na operação, e leva essa prática até hoje: entender o negócio antes de desenhar a solução. Também atua como mentor de startups no ecossistema brasileiro.',
-      initials: 'DB',
+      role: 'Marketing',
+      name: 'Luiz Dias',
+      bio: 'Luiz tem mais de 16 anos de experiência fazendo marcas crescerem no digital. Foi Head de Marketing coordenando operações em cinco países simultaneamente e atuou em algumas das empresas de tecnologia que mais cresceram no mundo, sempre com um compromisso claro: transformar investimento em resultado. Sua marca é enxergar o marketing como parte integral do negócio, e não como despesa. Ele sabe onde vale colocar dinheiro e onde ele está sendo desperdiçado. Aqui, ele garante que cada real investido em marketing tenha um caminho claro até a receita.',
+      initials: 'LD',
     },
     {
-      role: 'Marketing',
-      name: '[Nome]',
-      bio: '15 anos de marketing digital, com passagem pela TikTok. [Cargo e resultados a confirmar.]',
-      initials: '[N]',
-      placeholder: true,
+      role: 'Engenharia',
+      name: 'Daniel Miranda Birochi',
+      bio: 'Daniel tem mais de dez anos de experiência construindo tecnologia para o mercado financeiro, onde errar custa caro. Liderou sistemas usados por centenas de milhões de pessoas e esteve à frente de sistemas que operam agentes de inteligência artificial em escala, sempre ao lado de CEOs e fundadores, transformando estratégia em resultado. Sua marca é fazer a tecnologia trabalhar para o negócio: reduzir custos, eliminar retrabalho e tirar ideias do papel com segurança. Aqui, ele garante que tudo o que o marketing promete tenha uma operação sólida para entregar.',
+      initials: 'DM',
     },
   ] as Founder[],
   commitments: {
