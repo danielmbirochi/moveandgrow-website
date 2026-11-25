@@ -39,7 +39,7 @@ export default {
       role: 'Engenharia',
       name: 'Daniel Miranda Birochi',
       bio: 'Daniel tem mais de dez anos de experiência construindo tecnologia para o mercado financeiro, onde errar custa caro. Liderou sistemas usados por centenas de milhões de pessoas e esteve à frente de sistemas que operam agentes de inteligência artificial em escala, sempre ao lado de CEOs e fundadores, transformando estratégia em resultado. Sua marca é fazer a tecnologia trabalhar para o negócio: reduzir custos, eliminar retrabalho e tirar ideias do papel com segurança. Aqui, ele garante que tudo o que o marketing promete tenha uma operação sólida para entregar.',
-      initials: 'DB',
+      initials: 'DM',
     },
   ] as Founder[],
   commitments: {
