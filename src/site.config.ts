@@ -5,8 +5,8 @@
  */
 export const site = {
   url: 'https://moveandgrow.com.br',
-  email: '[EMAIL]',
-  whatsapp: '[WHATSAPP]',
+  email: 'daniel.miranda@moveandgrow.com.br',
+  whatsapp: '+55 11 98359-9999',
   nav: [
     { label: 'Para agências', href: '/para-agencias/' },
     { label: 'Para empresas', href: '/para-empresas/' },
