@@ -11,7 +11,7 @@ export default {
     headline: 'Evoluímos a operação de marketing que você já tem.',
     lead: 'Marketing e engenharia no mesmo time. Para agências que querem ganhar eficiência e para empresas que querem um marketing que funcione.',
     doors: [
-      { label: 'Sou agência', href: '/para-agencias/' },
+      { label: 'Sou agência', href: '/para-agencias/', primary: true },
       { label: 'Sou empresa', href: '/para-empresas/' },
     ],
   },
