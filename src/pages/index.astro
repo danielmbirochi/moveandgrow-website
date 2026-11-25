@@ -20,7 +20,7 @@ const jsonLd = [organization(home.seo.description), ...services('all', '/')];
       <h1 id="hero-title" class="mt-6 max-w-[16ch]">{home.hero.headline}</h1>
       <p class="mg-lead mt-8 max-w-[40rem]">{home.hero.lead}</p>
       <div class="mt-12 grid max-w-[44rem] gap-4 sm:grid-cols-2">
-        {home.hero.doors.map((d) => <Door href={d.href}>{d.label}</Door>)}
+        {home.hero.doors.map((d) => <Door href={d.href} primary={'primary' in d && d.primary}>{d.label}</Door>)}
       </div>
     </div>
   </section>
