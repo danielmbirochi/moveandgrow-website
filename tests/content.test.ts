@@ -41,7 +41,7 @@ const banned = [
 ];
 
 const ENGINEERING_BIO =
-  'Daniel Miranda Birochi. Há 10 anos constrói sistemas financeiros de missão crítica, onde um erro custa caro e parar não é opção. Projeta agentes de IA desde 2024 e já liderou arquitetura de agentes que operam em produção, todos os dias. Passou por grandes empresas de tecnologia, como a Binance. Começou a carreira ao lado do cliente, como engenheiro alocado na operação, e leva essa prática até hoje: entender o negócio antes de desenhar a solução. Também atua como mentor de startups no ecossistema brasileiro.';
+  'Daniel tem mais de dez anos de experiência construindo tecnologia para o mercado financeiro, onde errar custa caro. Liderou sistemas usados por centenas de milhões de pessoas e esteve à frente de sistemas que operam agentes de inteligência artificial em escala, sempre ao lado de CEOs e fundadores, transformando estratégia em resultado. Sua marca é fazer a tecnologia trabalhar para o negócio: reduzir custos, eliminar retrabalho e tirar ideias do papel com segurança. Aqui, ele garante que tudo o que o marketing promete tenha uma operação sólida para entregar.';
 
 describe('content', () => {
   it('collects a meaningful amount of copy', () => {
@@ -73,7 +73,7 @@ describe('content', () => {
   });
 
   it('keeps the engineering bio exactly as approved', () => {
-    expect(sobre.founders[0].bio).toBe(ENGINEERING_BIO);
+    expect(sobre.founders[1].bio).toBe(ENGINEERING_BIO);
   });
 
   it('never hard-codes the brand name', () => {
